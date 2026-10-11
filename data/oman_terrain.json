@@ -1,0 +1,732 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ELEV-HAJAR-SUMMITS",
+        "name_en": "Al Hajar Alpine Summits (2,000m - 3,019m)",
+        "name_ar": "قمم الحجر الشاهقة (٢٠٠٠م - ٣٠١٩م)",
+        "band": "2000m+",
+        "min_m": 2000,
+        "max_m": 3019,
+        "color": "#4a2810",
+        "fill_color": "#78350f",
+        "opacity": 0.65,
+        "category": "Elevation Zone"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              57.0,
+              23.28
+            ],
+            [
+              57.4,
+              23.32
+            ],
+            [
+              57.75,
+              23.18
+            ],
+            [
+              57.9,
+              23.1
+            ],
+            [
+              57.75,
+              23.0
+            ],
+            [
+              57.45,
+              23.1
+            ],
+            [
+              57.1,
+              23.15
+            ],
+            [
+              56.95,
+              23.2
+            ],
+            [
+              57.0,
+              23.28
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ELEV-HAJAR-HIGH",
+        "name_en": "Al Hajar High Mountains (1,000m - 2,000m)",
+        "name_ar": "جبال الحجر العالية (١٠٠٠م - ٢٠٠٠م)",
+        "band": "1000m - 2000m",
+        "min_m": 1000,
+        "max_m": 2000,
+        "color": "#9a3412",
+        "fill_color": "#c2410c",
+        "opacity": 0.5,
+        "category": "Elevation Zone"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              56.4,
+              23.85
+            ],
+            [
+              56.9,
+              23.65
+            ],
+            [
+              57.5,
+              23.5
+            ],
+            [
+              58.1,
+              23.35
+            ],
+            [
+              58.6,
+              23.2
+            ],
+            [
+              59.1,
+              22.95
+            ],
+            [
+              59.25,
+              22.75
+            ],
+            [
+              59.05,
+              22.65
+            ],
+            [
+              58.45,
+              22.9
+            ],
+            [
+              57.85,
+              22.85
+            ],
+            [
+              57.2,
+              22.9
+            ],
+            [
+              56.65,
+              23.2
+            ],
+            [
+              56.25,
+              23.6
+            ],
+            [
+              56.4,
+              23.85
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ELEV-HAJAR-MID",
+        "name_en": "Al Hajar Foothills & Plateaus (500m - 1,000m)",
+        "name_ar": "هضاب وسفوح الحجر (٥٠٠م - ١٠٠٠م)",
+        "band": "500m - 1000m",
+        "min_m": 500,
+        "max_m": 1000,
+        "color": "#d97706",
+        "fill_color": "#f59e0b",
+        "opacity": 0.35,
+        "category": "Elevation Zone"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              56.1,
+              24.3
+            ],
+            [
+              56.6,
+              24.0
+            ],
+            [
+              57.2,
+              23.75
+            ],
+            [
+              57.9,
+              23.55
+            ],
+            [
+              58.5,
+              23.4
+            ],
+            [
+              59.15,
+              23.2
+            ],
+            [
+              59.5,
+              22.7
+            ],
+            [
+              59.25,
+              22.45
+            ],
+            [
+              58.5,
+              22.65
+            ],
+            [
+              57.7,
+              22.6
+            ],
+            [
+              56.9,
+              22.7
+            ],
+            [
+              56.3,
+              23.1
+            ],
+            [
+              55.9,
+              23.8
+            ],
+            [
+              56.1,
+              24.3
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ELEV-MUSANDAM",
+        "name_en": "Musandam Mountain Massif (500m - 2,087m)",
+        "name_ar": "مرتفعات مسندم الجبلية (٥٠٠م - ٢٠٨٧م)",
+        "band": "500m - 2087m",
+        "min_m": 500,
+        "max_m": 2087,
+        "color": "#b45309",
+        "fill_color": "#d97706",
+        "opacity": 0.48,
+        "category": "Elevation Zone"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              56.05,
+              26.25
+            ],
+            [
+              56.35,
+              26.2
+            ],
+            [
+              56.45,
+              25.85
+            ],
+            [
+              56.25,
+              25.65
+            ],
+            [
+              56.0,
+              25.85
+            ],
+            [
+              56.05,
+              26.25
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ELEV-DHOFAR-HIGH",
+        "name_en": "Dhofar High Escarpment (1,000m - 2,100m)",
+        "name_ar": "مرتفعات ظفار الشاهقة (١٠٠٠م - ٢١٠٠م)",
+        "band": "1000m - 2100m",
+        "min_m": 1000,
+        "max_m": 2100,
+        "color": "#78350f",
+        "fill_color": "#9a3412",
+        "opacity": 0.55,
+        "category": "Elevation Zone"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              53.3,
+              16.85
+            ],
+            [
+              53.8,
+              17.05
+            ],
+            [
+              54.5,
+              17.2
+            ],
+            [
+              55.1,
+              17.25
+            ],
+            [
+              55.15,
+              17.05
+            ],
+            [
+              54.6,
+              16.98
+            ],
+            [
+              53.9,
+              16.85
+            ],
+            [
+              53.3,
+              16.7
+            ],
+            [
+              53.3,
+              16.85
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ELEV-DHOFAR-MID",
+        "name_en": "Dhofar Plateau & Khareef Slopes (300m - 1,000m)",
+        "name_ar": "سفوح ظفار وهضاب الخريف (٣٠٠م - ١٠٠٠م)",
+        "band": "300m - 1000m",
+        "min_m": 300,
+        "max_m": 1000,
+        "color": "#15803d",
+        "fill_color": "#22c55e",
+        "opacity": 0.28,
+        "category": "Elevation Zone"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              53.1,
+              16.9
+            ],
+            [
+              53.6,
+              17.2
+            ],
+            [
+              54.4,
+              17.35
+            ],
+            [
+              55.3,
+              17.35
+            ],
+            [
+              55.4,
+              16.95
+            ],
+            [
+              54.8,
+              16.85
+            ],
+            [
+              54.0,
+              16.75
+            ],
+            [
+              53.1,
+              16.6
+            ],
+            [
+              53.1,
+              16.9
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name_en": "Jabal Shams",
+        "name_ar": "جبل شمس",
+        "elevation_m": 3019,
+        "range_en": "Al Hajar Mountains (Highest peak in Oman)",
+        "range_ar": "سلسلة جبال الحجر (أعلى قمة في عمان)",
+        "type": "Summit",
+        "category": "Mountain Peak"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          57.265,
+          23.237
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name_en": "Jabal Akhdar (Saiq Plateau)",
+        "name_ar": "الجبل الأخضر (سيق)",
+        "elevation_m": 2980,
+        "range_en": "Western Al Hajar",
+        "range_ar": "الحجر الغربي",
+        "type": "Summit",
+        "category": "Mountain Peak"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          57.65,
+          23.07
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name_en": "Jabal Misht",
+        "name_ar": "جبل مشط",
+        "elevation_m": 2090,
+        "range_en": "Western Al Hajar (Rock Climbing Wall)",
+        "range_ar": "الحجر الغربي",
+        "type": "Peak",
+        "category": "Mountain Peak"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          56.995,
+          23.255
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name_en": "Jabal Kawr",
+        "name_ar": "جبل كَوْر",
+        "elevation_m": 2730,
+        "range_en": "Western Al Hajar",
+        "range_ar": "الحجر الغربي",
+        "type": "Peak",
+        "category": "Mountain Peak"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          57.06,
+          23.13
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name_en": "Jabal Harim",
+        "name_ar": "جبل حارم",
+        "elevation_m": 2087,
+        "range_en": "Musandam Mountains",
+        "range_ar": "جبال مسندم",
+        "type": "Summit",
+        "category": "Mountain Peak"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          56.23,
+          25.98
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name_en": "Jabal Samhan",
+        "name_ar": "جبل سمحان",
+        "elevation_m": 2100,
+        "range_en": "Dhofar Mountains (Nature Reserve)",
+        "range_ar": "جبال ظفار (محمية طبيعية)",
+        "type": "Summit",
+        "category": "Mountain Peak"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          54.75,
+          17.15
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name_en": "Jabal Al Qara",
+        "name_ar": "جبل القرا",
+        "elevation_m": 1350,
+        "range_en": "Dhofar Mountains (Khareef Belt)",
+        "range_ar": "جبال ظفار (حزام الخريف)",
+        "type": "Mountain",
+        "category": "Mountain Peak"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          54.1,
+          17.12
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name_en": "Jabal Al Qamar",
+        "name_ar": "جبل القمر",
+        "elevation_m": 1280,
+        "range_en": "Western Dhofar Range",
+        "range_ar": "سلسلة غرب ظفار",
+        "type": "Mountain",
+        "category": "Mountain Peak"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          53.4,
+          16.8
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name_en": "Jabal Bani Jabir",
+        "name_ar": "جبل بني جابر",
+        "elevation_m": 2150,
+        "range_en": "Eastern Al Hajar",
+        "range_ar": "الحجر الشرقي",
+        "type": "Peak",
+        "category": "Mountain Peak"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          59.05,
+          22.85
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name_en": "Wadi Shab",
+        "name_ar": "وادي شاب",
+        "description": "Famous coastal canyon with emerald freshwater pools",
+        "category": "Wadi / Valley"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            59.245,
+            22.84
+          ],
+          [
+            59.22,
+            22.835
+          ],
+          [
+            59.185,
+            22.83
+          ],
+          [
+            59.15,
+            22.81
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name_en": "Wadi Tiwi",
+        "name_ar": "وادي طيوي",
+        "description": "Deep gorges with lush date palm plantations",
+        "category": "Wadi / Valley"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            59.26,
+            22.815
+          ],
+          [
+            59.225,
+            22.785
+          ],
+          [
+            59.18,
+            22.75
+          ],
+          [
+            59.12,
+            22.71
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name_en": "Wadi Bani Khalid",
+        "name_ar": "وادي بني خالد",
+        "description": "Permanent river valley flowing year-round through limestone caves",
+        "category": "Wadi / Valley"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            59.09,
+            22.62
+          ],
+          [
+            59.07,
+            22.58
+          ],
+          [
+            59.03,
+            22.54
+          ],
+          [
+            58.98,
+            22.51
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name_en": "Wadi Dayqah",
+        "name_ar": "وادي ضيقة",
+        "description": "Site of the massive Wadi Dayqah Dam reservoir",
+        "category": "Wadi / Valley"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            58.85,
+            23.08
+          ],
+          [
+            58.87,
+            23.05
+          ],
+          [
+            58.89,
+            23.0
+          ],
+          [
+            58.92,
+            22.95
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name_en": "Wadi Al Jizzi",
+        "name_ar": "وادي الجزي",
+        "description": "Historical mountain pass connecting Sohar Port to Al Buraimi",
+        "category": "Wadi / Valley"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            56.7,
+            24.32
+          ],
+          [
+            56.55,
+            24.28
+          ],
+          [
+            56.35,
+            24.25
+          ],
+          [
+            56.05,
+            24.24
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name_en": "Wadi Darbat",
+        "name_ar": "وادي دربات",
+        "description": "Dhofar's famous cascading waterfall valley during Khareef",
+        "category": "Wadi / Valley"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            54.44,
+            17.06
+          ],
+          [
+            54.45,
+            17.09
+          ],
+          [
+            54.46,
+            17.11
+          ],
+          [
+            54.47,
+            17.13
+          ]
+        ]
+      }
+    }
+  ]
+}

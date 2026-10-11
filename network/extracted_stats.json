@@ -1,0 +1,74 @@
+{
+  "source_pbf": "C:\\Users\\wail\\oman-map-demo\\network\\raw\\gcc-states-latest.osm.pbf",
+  "output_file": "C:\\Users\\wail\\oman-map-demo\\network\\oman_roads.osm.gz",
+  "output_size_bytes": 34341437,
+  "total_nodes": 1800531,
+  "total_ways": 177295,
+  "total_relations": 3364,
+  "total_road_km": 101265.18,
+  "ways_by_class": {
+    "primary": 3347,
+    "trunk": 3653,
+    "secondary": 3169,
+    "trunk_link": 3455,
+    "tertiary": 8118,
+    "residential": 76333,
+    "secondary_link": 688,
+    "tertiary_link": 1007,
+    "primary_link": 1590,
+    "unclassified": 14488,
+    "service": 43453,
+    "motorway_link": 860,
+    "motorway": 473,
+    "track": 16316,
+    "living_street": 339,
+    "road": 6
+  },
+  "km_by_class": {
+    "track": 26804.06,
+    "unclassified": 21334.37,
+    "residential": 20244.93,
+    "service": 8671.9,
+    "tertiary": 8073.05,
+    "trunk": 7066.15,
+    "secondary": 3378.91,
+    "primary": 3280.33,
+    "motorway": 1116.84,
+    "trunk_link": 606.44,
+    "motorway_link": 379.7,
+    "primary_link": 146.87,
+    "secondary_link": 53.14,
+    "tertiary_link": 51.84,
+    "living_street": 46.27,
+    "road": 10.37
+  },
+  "ways_by_surface": {
+    "unspecified": 134740,
+    "paved_asphalt": 34519,
+    "unpaved_track": 8036
+  },
+  "km_by_surface": {
+    "unspecified": 62624.56,
+    "paved_asphalt": 24413.92,
+    "unpaved_track": 14226.7
+  },
+  "roundabout_ways": 1365,
+  "node_features": {
+    "traffic_signals": 343,
+    "motorway_junction": 561,
+    "crossing": 1933,
+    "turning_circle": 241,
+    "stop": 907,
+    "give_way": 50
+  },
+  "turn_restrictions": {
+    "only_straight_on": 1337,
+    "no_right_turn": 429,
+    "no_left_turn": 482,
+    "no_u_turn": 931,
+    "only_left_turn": 71,
+    "only_right_turn": 111,
+    "no_straight_on": 3
+  },
+  "elapsed_seconds": 118.51
+}

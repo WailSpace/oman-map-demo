@@ -1,0 +1,1946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oman Geospatial Platform | منصة الخرائط العمانية</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Google Fonts: Inter & Cairo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    /* Remove any browser focus outline or bounding box frame */
+    path:focus,
+    svg:focus,
+    canvas:focus,
+    .leaflet-container :focus,
+    .leaflet-interactive:focus,
+    .leaflet-interactive,
+    path.leaflet-interactive {
+      outline: none !important;
+      border: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+      box-shadow: none !important;
+    }
+    body {
+      font-family: 'Inter', 'Cairo', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #sidebar {
+      width: 440px;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+    }
+    .header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.7);
+    }
+    .header h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header .sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      background: #172033;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 12px 8px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover {
+      color: #fff;
+      background: rgba(255,255,255,0.04);
+    }
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom: 2px solid var(--primary);
+      background: rgba(16, 185, 129, 0.08);
+    }
+    .tab-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+    .card-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+    .badge-success { background: rgba(16,185,129,0.2); color: #34d399; }
+    .badge-danger { background: rgba(239,68,68,0.2); color: #f87171; }
+    .badge-info { background: rgba(59,130,246,0.2); color: #60a5fa; }
+    .badge-warning { background: rgba(245,158,11,0.2); color: #fbbf24; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--primary);
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn:hover {
+      background: var(--primary-dark);
+      color: #fff;
+    }
+    .btn-secondary {
+      background: #334155;
+      color: #fff;
+    }
+    .btn-secondary:hover {
+      background: #475569;
+    }
+
+    .lang-switcher {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .lang-btn {
+      flex: 1;
+      padding: 6px;
+      background: #1e293b;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lang-btn.active {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: var(--primary);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    #map-container {
+      flex: 1;
+      position: relative;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+      background: #090d16;
+    }
+    .map-legend {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 16px;
+      z-index: 1000;
+      font-size: 0.75rem;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .legend-box {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .stat-box {
+      background: rgba(255,255,255,0.03);
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .stat-val {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .stat-lbl {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+    .vehicle-row {
+      padding: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .vehicle-row:hover {
+      background: rgba(255,255,255,0.05);
+    }
+    .vehicle-row:last-child {
+      border-bottom: none;
+    }
+
+    /* Peak and Wadi Map Labels */
+    .peak-marker-pill {
+      background: rgba(15, 23, 42, 0.92);
+      border: 1.5px solid #f59e0b;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fef08a;
+      white-space: nowrap;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+      pointer-events: auto;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .peak-marker-pill:hover {
+      background: #78350f;
+      color: #fff;
+      border-color: #fbbf24;
+      transform: scale(1.12);
+    }
+    .wadi-label-pill {
+      background: rgba(12, 74, 110, 0.88);
+      border: 1px solid #38bdf8;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 9px;
+      font-weight: 600;
+      color: #e0f2fe;
+      white-space: nowrap;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+    .pulse-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      margin-right: 4px;
+    }
+    .sim-spd-btn {
+      background: #334155;
+      color: #94a3b8;
+      border: none;
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 0.72rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+    .sim-spd-btn:hover {
+      color: #fff;
+    }
+    .sim-spd-btn.active {
+      background: var(--primary);
+      color: #000;
+    }
+    .sim-vehicle-icon {
+      background: none !important;
+      border: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Left Sidebar Controls -->
+  <aside id="sidebar">
+    <div class="header">
+      <h1>🗺️ Oman Geospatial Platform</h1>
+      <div class="sub">منصة الخرائط العمانية عالية الدقة | Base Engine</div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('borders')">🏛️ Boundaries</button>
+      <button class="tab-btn" onclick="switchTab('traffic')">🚦 Traffic Sim & SUMO</button>
+      <button class="tab-btn" onclick="switchTab('vms')">🚚 VMS Fleet</button>
+      <button class="tab-btn" onclick="switchTab('delivery')">📦 Delivery</button>
+    </div>
+
+    <!-- Tab 1: Borders & Spatial Analysis -->
+    <div id="tab-borders" class="tab-content active">
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="stat-val" id="stat-gov-count">11</div>
+          <div class="stat-lbl">Governorates (المحافظات)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" id="stat-wil-count">61</div>
+          <div class="stat-lbl">States / Wilayats (الولايات)</div>
+        </div>
+      </div>
+
+      <!-- Interactive State Selection Card -->
+      <div class="card">
+        <div class="card-title">
+          <span>State Selection (تحديد الولاية)</span>
+          <span class="badge badge-info" id="badge-selection-status">Click to Highlight</span>
+        </div>
+        <p style="font-size:0.76rem; color:var(--text-muted); line-height:1.4;">
+          Click on any state/wilayat on the map to slightly highlight it and view its details. Click outside to clear.
+        </p>
+      </div>
+
+      <!-- Boundary Layer Visibility -->
+      <div class="card">
+        <div class="card-title">
+          <span>Boundary Structure (0 Overlaps)</span>
+        </div>
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; margin-bottom:8px; cursor:pointer;">
+          <input type="checkbox" id="chk-govs" checked onchange="toggleLayer('govs')">
+          <span><strong>11 Governorates (المحافظات)</strong> <span style="font-size:10px; color:var(--text-muted);">(Combination of States)</span></span>
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; margin-bottom:8px; cursor:pointer;">
+          <input type="checkbox" id="chk-wils" checked onchange="toggleLayer('wils')">
+          <span><strong>61 States / Wilayats (الولايات)</strong> <span style="font-size:10px; color:var(--text-muted);">(geoBoundaries Base)</span></span>
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; cursor:pointer;">
+          <input type="checkbox" id="chk-national" checked onchange="toggleLayer('national')">
+          <span>Sovereign National Perimeter (حدود السلطنة)</span>
+        </label>
+      </div>
+
+      <!-- Road Network & Highways Card -->
+      <div class="card">
+        <div class="card-title">
+          <span>Road Network & Highways (شبكة الطرق)</span>
+          <span class="badge badge-success" id="badge-roads-count">SUMO Navigable</span>
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px; line-height:1.4;">
+          National expressways, primary arterials, and regional corridors with ROP legal speed limits.
+        </p>
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; margin-bottom:8px; cursor:pointer;">
+          <input type="checkbox" id="chk-sumo-roads" checked onchange="toggleSumoRoadLayer(this.checked)">
+          <span><strong>Navigable SUMO Road Network (الشبكة الملاحية)</strong> <span style="font-size:10px; color:#10b981;">(665k Edges • Dynamic)</span></span>
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; margin-bottom:8px; cursor:pointer;">
+          <input type="checkbox" id="chk-roads-highways" onchange="toggleRoadLayer('highways')">
+          <span><strong>Expressways & National Highways (Static)</strong> <span style="font-size:10px; color:#f59e0b;">(100 - 120 km/h)</span></span>
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; margin-bottom:8px; cursor:pointer;">
+          <input type="checkbox" id="chk-roads-secondary" onchange="toggleRoadLayer('secondary')">
+          <span><strong>Secondary & Regional Roads</strong> <span style="font-size:10px; color:#a855f7;">(60 - 80 km/h)</span></span>
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; margin-bottom:8px; cursor:pointer;">
+          <input type="checkbox" id="chk-roads-tracks" onchange="toggleRoadLayer('tracks')">
+          <span><strong>Wadi & Desert Dirt Tracks (طرق ترابية ووديان)</strong> <span style="font-size:10px; color:#d97706;">(25,880 • 4WD)</span></span>
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; margin-bottom:10px; cursor:pointer;">
+          <input type="checkbox" id="chk-roads-residential" onchange="toggleRoadLayer('residential')">
+          <span><strong>Neighborhood & Local Streets (شوارع الأحياء)</strong> <span style="font-size:10px; color:#94a3b8;">(14,241 • Urban)</span></span>
+        </label>
+
+        <!-- Key Highway Corridors Quick-Fly -->
+        <div style="border-top:1px solid var(--border-color); padding-top:8px;">
+          <div style="font-size:0.72rem; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:6px;">
+            Major Highway Corridors (المحاور الوطنية)
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
+            <button class="lang-btn" onclick="flyToRoad('muscat_exp')">🛣️ Muscat Expressway</button>
+            <button class="lang-btn" onclick="flyToRoad('batinah')">🛣️ Batinah Expressway</button>
+            <button class="lang-btn" onclick="flyToRoad('nizwa_salalah')">🛣️ Nizwa - Salalah (R31)</button>
+            <button class="lang-btn" onclick="flyToRoad('sur_coastal')">🛣️ Qurayyat - Sur (R17)</button>
+            <button class="lang-btn" onclick="flyToRoad('duqm_corridor')">🛣️ Duqm Corridor (R32)</button>
+            <button class="lang-btn" onclick="flyToRoad('buraimi')">🛣️ Ibri - Buraimi (R21)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- High-Resolution Topographic Terrain & Elevation Card -->
+      <div class="card">
+        <div class="card-title">
+          <span>Topographic Terrain (التضاريس الطبوغرافية)</span>
+          <span class="badge badge-success">High-Res Offline</span>
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px; line-height:1.4;">
+          Genuine topographic map with continuous elevation contours, 3D multidirectional hillshade, and mountain relief.
+        </p>
+
+        <!-- 3D Hillshade Relief Opacity Control -->
+        <div style="background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.06); margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <label style="display:flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer;">
+              <input type="checkbox" id="chk-hillshade" checked onchange="toggleHillshade(this.checked)">
+              <span><strong>3D Mountain Hillshade (ظلال المرتفعات)</strong></span>
+            </label>
+            <span id="lbl-hillshade-opacity" style="font-size:0.75rem; color:var(--primary); font-weight:700;">65%</span>
+          </div>
+          <input type="range" id="rng-hillshade-opacity" min="0" max="100" value="65" style="width:100%; accent-color:var(--primary); cursor:pointer;" oninput="setHillshadeOpacity(this.value)">
+        </div>
+
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; margin-bottom:8px; cursor:pointer;">
+          <input type="checkbox" id="chk-terrain-peaks" checked onchange="toggleTerrainLayer('peaks')">
+          <span><strong>Mountain Summits & Peaks (القمم)</strong> <span style="font-size:10px; color:var(--text-muted);">(Jabal Shams, Akhdar, Samhan)</span></span>
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; margin-bottom:10px; cursor:pointer;">
+          <input type="checkbox" id="chk-terrain-wadis" checked onchange="toggleTerrainLayer('wadis')">
+          <span><strong>Valleys & Wadis (الأودية)</strong> <span style="font-size:10px; color:var(--text-muted);">(Shab, Tiwi, Bani Khalid, Ghul)</span></span>
+        </label>
+
+        <!-- Topographic Quick-Fly Showcase -->
+        <div style="border-top:1px solid var(--border-color); padding-top:8px;">
+          <div style="font-size:0.72rem; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:6px;">
+            Explore Topographic Wonders (استكشاف التضاريس)
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
+            <button class="lang-btn" onclick="flyToOmanSpot('shams')" title="Highest Peak in Oman 3,019m">🏔️ Jabal Shams (3,019m)</button>
+            <button class="lang-btn" onclick="flyToOmanSpot('akhdar')" title="Sayq Plateau 2,980m">🌿 Jabal Akhdar (2,980m)</button>
+            <button class="lang-btn" onclick="flyToOmanSpot('shab')" title="Deep Coastal Canyons">🌊 Wadi Shab & Tiwi</button>
+            <button class="lang-btn" onclick="flyToOmanSpot('samhan')" title="Dhofar Escarpment 2,100m">⛰️ Jabal Samhan (Dhofar)</button>
+            <button class="lang-btn" onclick="flyToOmanSpot('musandam')" title="Strait of Hormuz Fjords">⛵ Musandam Fjords</button>
+            <button class="lang-btn" onclick="flyToOmanSpot('wahiba')" title="Sharqiyah Mega-Dunes">🏜️ Wahiba Sands</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Basemap Switcher (Offline Cached) -->
+      <div class="card">
+        <div class="card-title">
+          <span>Basemap Layer (الخريطة الأساسية)</span>
+          <span class="badge badge-success">Google Terrain</span>
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">
+          High-resolution physical terrain cropped strictly to Oman sovereign borders:
+        </p>
+
+        <!-- Crop to Oman Borders Toggle -->
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; margin-bottom:10px; cursor:pointer; background:rgba(16,185,129,0.08); padding:6px 10px; border-radius:6px; border:1px solid rgba(16,185,129,0.2);">
+          <input type="checkbox" id="chk-crop-mask" checked onchange="toggleCropMask(this.checked)">
+          <span><strong>✂️ Crop to Oman Borders Only (اقتصاص لحدود عمان فقط)</strong></span>
+        </label>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+          <button class="lang-btn active basemap-btn" id="btn-base-google_terrain" onclick="switchBasemap('google_terrain')">🗺️ Google Terrain (Main)</button>
+          <button class="lang-btn basemap-btn" id="btn-base-opentopo" onclick="switchBasemap('opentopo')">⛰️ High-Res Topo</button>
+          <button class="lang-btn basemap-btn" id="btn-base-esri_topo" onclick="switchBasemap('esri_topo')">🌄 ESRI Topo</button>
+          <button class="lang-btn basemap-btn" id="btn-base-google_hybrid" onclick="switchBasemap('google_hybrid')">🛰️ Google Satellite</button>
+          <button class="lang-btn basemap-btn" id="btn-base-dark" onclick="switchBasemap('dark')" style="grid-column: span 2;">🌙 Dark Sovereign Theme</button>
+        </div>
+      </div>
+
+      <!-- Geocode Card -->
+      <div class="card">
+        <div class="card-title">
+          <span>Reverse Geocoder</span>
+          <span class="badge badge-info">Shapely Spatial</span>
+        </div>
+        <p style="font-size:0.76rem; color:var(--text-muted); margin-bottom:8px;">
+          Click anywhere on the map or click any state name to query containment.
+        </p>
+        <div id="geocode-result" style="background:#0b1120; border-radius:6px; padding:10px; font-size:0.8rem;">
+          <div style="color:var(--text-muted);">💡 Click on map to test coordinates</div>
+        </div>
+      </div>
+
+      <!-- Map Acceleration & Cache Component Card -->
+      <div class="card" id="card-cache-component">
+        <div class="card-title">
+          <span>Map Acceleration & Cache (تسريع الخريطة)</span>
+          <span class="badge badge-success" id="badge-cache-status">⚡ 3-Tier Cache</span>
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px; line-height:1.4;">
+          Multi-tier acceleration: ServiceWorker Browser Cache + RAM LRU + Persistent Local Disk + GZip compression for seamless, stutter-free navigation.
+        </p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px; font-size:0.75rem;">
+          <div style="background:rgba(255,255,255,0.03); padding:6px 8px; border-radius:4px; border:1px solid var(--border-color);">
+            <div style="color:var(--text-muted); font-size:0.68rem;">RAM & Disk Tiles</div>
+            <div style="font-weight:700; color:#10b981;" id="stat-ram-cache">Active (0ms)</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.03); padding:6px 8px; border-radius:4px; border:1px solid var(--border-color);">
+            <div style="color:var(--text-muted); font-size:0.68rem;">Cached Vector Tiles</div>
+            <div style="font-weight:700; color:#38bdf8;" id="stat-vector-cache">0 Cached</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn" id="btn-preload-view" style="flex:2; font-size:0.78rem; padding:8px 10px;" onclick="preloadCurrentViewport()">
+            🚀 Pre-Buffer Current View
+          </button>
+          <button class="btn btn-secondary" style="flex:1; font-size:0.78rem; padding:8px 8px;" onclick="clearClientCache()">
+            🧹 Refresh
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Topological Guarantee</span>
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); line-height:1.5;">
+          • All Governorates are created by <strong>dissolving the exact states</strong> they contain.<br>
+          • <strong>Zero overlapping polygons</strong>, zero sliver gaps.<br>
+          • Derived from pure <strong>geoBoundaries National Structure</strong>.
+        </p>
+      </div>
+    </div>
+
+    <!-- Tab 2: Traffic Simulation & SUMO Network -->
+    <div id="tab-traffic" class="tab-content">
+      <!-- Network Real Metrics -->
+      <div class="stat-grid" style="grid-template-columns: 1fr 1fr; margin-bottom:10px;">
+        <div class="stat-box">
+          <div class="stat-val" style="color:#10b981;">665,725</div>
+          <div class="stat-lbl">Drivable Edges (حواف الطرق)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" style="color:#38bdf8;">181,673 km</div>
+          <div class="stat-lbl">Total Road Length (إجمالي الأطوال)</div>
+        </div>
+      </div>
+      <div class="stat-grid" style="grid-template-columns: 1fr 1fr 1fr; margin-bottom:14px;">
+        <div class="stat-box">
+          <div class="stat-val" style="color:#10b981; font-size:1.05rem;">1,487</div>
+          <div class="stat-lbl">Roundabouts (دوار)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" style="color:#f59e0b; font-size:1.05rem;">343</div>
+          <div class="stat-lbl">Signals (إشارات)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" style="color:#a855f7; font-size:1.05rem;">3,364</div>
+          <div class="stat-lbl">Turn Rules (قيود)</div>
+        </div>
+      </div>
+
+      <!-- Network Topology Layer Toggles -->
+      <div class="card">
+        <div class="card-title">
+          <span>SUMO Topology Features</span>
+          <span class="badge badge-success">Navigable Graph</span>
+        </div>
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; margin-bottom:8px; cursor:pointer;">
+          <input type="checkbox" id="chk-feat-roundabouts" checked onchange="toggleFeatureLayer('roundabouts', this.checked)">
+          <span><strong>Roundabouts (الدوارات)</strong> <span style="font-size:10px; color:#10b981;">(1,365 Surveys)</span></span>
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; margin-bottom:8px; cursor:pointer;">
+          <input type="checkbox" id="chk-feat-signals" onchange="toggleFeatureLayer('signals', this.checked)">
+          <span><strong>Traffic Signals (إشارات المرور)</strong> <span style="font-size:10px; color:#f59e0b;">(Actuated TLS)</span></span>
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; margin-bottom:8px; cursor:pointer;">
+          <input type="checkbox" id="chk-feat-exits" onchange="toggleFeatureLayer('exits', this.checked)">
+          <span><strong>Motorway Exits (مخارج الطرق السريعة)</strong> <span style="font-size:10px; color:#3b82f6;">(561 Exits)</span></span>
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; margin-bottom:6px; cursor:pointer;">
+          <input type="checkbox" id="chk-feat-uturns" onchange="toggleFeatureLayer('uturns', this.checked)">
+          <span><strong>U-Turn Slots & Loops (فتحات الدوران للخلف)</strong> <span style="font-size:10px; color:#a855f7;">(2,196 Slots)</span></span>
+        </label>
+      </div>
+
+      <!-- Muscat Microscopic Simulation Playback Card -->
+      <div class="card">
+        <div class="card-title">
+          <span>Muscat Microscopic Traffic Sim</span>
+          <span class="badge badge-success"><span class="pulse-dot"></span> SUMO Engine</span>
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px; line-height:1.4;">
+          Headless SUMO simulation of 600 commuter vehicles across Sultan Qaboos St, Muscat Expressway, and Seeb arterial corridors.
+        </p>
+
+        <button class="btn" onclick="focusMuscatSimulation()" style="margin-bottom:10px;">
+          📍 Focus Muscat Simulation Area
+        </button>
+
+        <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.06); margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div style="font-size:0.8rem; font-weight:700;">
+              Simulation Time: <span id="sim-time-lbl" style="color:var(--primary); font-family:monospace;">00:00</span> / 30:00
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">
+              Active: <strong id="sim-active-vehicles" style="color:#fff;">0</strong> / 600
+            </div>
+          </div>
+          <input type="range" id="sim-slider" min="0" max="449" value="0" style="width:100%; accent-color:var(--primary); cursor:pointer;" oninput="onSimSliderInput(this.value)">
+        </div>
+
+        <div style="display:flex; gap:6px; margin-bottom:10px;">
+          <button class="btn" id="btn-sim-play" style="flex:2;" onclick="toggleSimPlay()">▶️ Play</button>
+          <button class="btn btn-secondary" style="flex:1;" onclick="resetSim()">⏮️ Reset</button>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">
+          <span>Playback Speed:</span>
+          <div style="display:flex; gap:4px;">
+            <button class="sim-spd-btn active" id="btn-spd-1" onclick="setSimSpeed(1.0)">1x</button>
+            <button class="sim-spd-btn" id="btn-spd-2" onclick="setSimSpeed(2.0)">2x</button>
+            <button class="sim-spd-btn" id="btn-spd-5" onclick="setSimSpeed(5.0)">5x</button>
+            <button class="sim-spd-btn" id="btn-spd-10" onclick="setSimSpeed(10.0)">10x</button>
+          </div>
+        </div>
+
+        <div style="border-top:1px solid var(--border-color); padding-top:8px; font-size:0.72rem; color:var(--text-muted); line-height:1.6;">
+          <div>• <strong>Mean Speed:</strong> 79.0 km/h (Expressway & Arterial)</div>
+          <div>• <strong>Mean Commute:</strong> 14.0 min (18.47 km distance)</div>
+          <div>• <strong>Teleports / Collisions:</strong> 0 (Verified mathematical graph)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: VMS Telematics -->
+    <div id="tab-vms" class="tab-content">
+      <div class="card">
+        <div class="card-title">
+          <span>Telematics Stream Simulator</span>
+          <span class="badge badge-success"><span class="pulse-dot"></span> Live</span>
+        </div>
+        <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px;">
+          Real-time GPS point snapping, State geofencing, and speed compliance monitoring.
+        </p>
+        <button class="btn" onclick="tickSimulation()">⚡ Step Simulation Tick (Adv. Fleet)</button>
+        <button class="btn btn-secondary" id="btn-auto-tick" style="margin-top:8px;" onclick="toggleAutoTick()">▶ Start Real-Time Stream (2s)</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Live Fleet Telemetry (4 Units)</span>
+        </div>
+        <div id="vehicles-list">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Last-Mile Delivery -->
+    <div id="tab-delivery" class="tab-content">
+      <div class="card">
+        <div class="card-title">
+          <span>Multi-Stop Route Dispatch</span>
+          <span class="badge badge-info">VRP Solver</span>
+        </div>
+        <div style="font-size:0.82rem; margin-bottom:10px;">
+          <div><strong>Route ID:</strong> <span id="del-route-id">Loading...</span></div>
+          <div><strong>Courier:</strong> Tariq Al-Zadjali (Motorcycle)</div>
+          <div><strong>Total Distance:</strong> 46.5 km (~65 min)</div>
+          <div><strong>Governorate:</strong> Muscat (مسقط)</div>
+        </div>
+        <button class="btn" onclick="focusDeliveryRoute()">🎯 Focus Delivery Route</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Stops Sequence</span>
+        </div>
+        <div class="stop-timeline" id="delivery-stops">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Interactive Map Canvas -->
+  <div id="map-container">
+    <div id="map"></div>
+    <div class="map-legend">
+      <div style="font-weight:700; margin-bottom:6px; color:#fff;">Oman Topographic & Sovereign Legend</div>
+      <div class="legend-item"><div class="legend-box" style="border:2px solid #ffffff; background:none;"></div> National Border (الحدود السيادية)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#3b82f6; opacity:0.5; border:1px solid #60a5fa;"></div> Governorates (اتحاد الولايات - 0 تداخل)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#ff758f; opacity:0.25; border:1px dashed #fff;"></div> 61 States / Wilayats (الولايات)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#10b981; border:1px solid #fff;"></div> State Click Highlight (إبراز هادئ بدون إطار)</div>
+      <div class="legend-item"><div class="legend-box" style="background:linear-gradient(45deg, #78350f, #f59e0b); border:1px solid #fcd34d;"></div> High-Res Topo Contours (خطوط الكنتور)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#475569; border:1px solid #94a3b8;"></div> 3D Multidirectional Hillshade (ظلال المرتفعات)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#78350f; border:1px solid #f59e0b;"></div> ▲ High Summits 2000m+ (قمم بارزة)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#38bdf8; height:4px; margin-top:5px;"></div> Valleys & Canyons (أودية وخوانق صخرية)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#f59e0b; height:4px; margin-top:5px; box-shadow:0 0 4px #f59e0b;"></div> 120 km/h Expressway (طريق سريع مزدوج)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#3b82f6; height:3px; margin-top:5px;"></div> 100 km/h National Highway (طريق وطني)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#10b981; height:3px; margin-top:5px;"></div> 100 km/h Primary Arterial (طريق شرياني)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#a855f7; height:2px; margin-top:5px;"></div> 80 km/h Regional Road (طريق ثانوي)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#d97706; height:2px; margin-top:5px; border-bottom:1px dashed #fff;"></div> 4WD Dirt/Wadi Track (طريق ترابي/وادي)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#10b981; border-radius:50%; width:10px; height:10px; margin-top:2px; border:1px solid #fff;"></div> Roundabout (دوار مروري معتمد)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#f59e0b; border-radius:50%; width:10px; height:10px; margin-top:2px; border:1px solid #fff;"></div> Traffic Signal (إشارة مرورية)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#3b82f6; border-radius:50%; width:10px; height:10px; margin-top:2px; border:1px solid #fff;"></div> Motorway Exit (مخرج طريق سريع)</div>
+      <div class="legend-item"><div class="legend-box" style="background:#a855f7; border-radius:50%; width:10px; height:10px; margin-top:2px; border:1px solid #fff;"></div> U-Turn Slot (فتحة دوران للخلف)</div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Initialize map centered on Oman with high-resolution view
+    const map = L.map('map', {
+      center: [21.5, 57.0],
+      zoom: 6.5,
+      zoomSnap: 0.25,
+      zoomControl: true
+    });
+
+    // Dedicated pane to crop Google Terrain & Basemaps strictly to Oman borders
+    map.createPane('cropMaskPane');
+    map.getPane('cropMaskPane').style.zIndex = 380;          // Above tiles, below vector data
+    map.getPane('cropMaskPane').style.pointerEvents = 'none'; // Ensure mouse clicks pass through
+
+    // Road network pane (above crop mask) drawn on a single <canvas> instead of thousands of SVG paths
+    map.createPane('roadsPane');
+    map.getPane('roadsPane').style.zIndex = 410;
+    const roadsCanvasRenderer = L.canvas({ pane: 'roadsPane', padding: 0.5, tolerance: 4 });
+
+    // Smoother tile loading: keep an 8-tile radius buffer of loaded tiles, defer updates while user is actively dragging
+    L.TileLayer.mergeOptions({ keepBuffer: 8, updateWhenZooming: false, updateWhenIdle: true, updateInterval: 120 });
+
+    // Basemap Layers (Served offline via local caching tile proxy)
+    const basemaps = {
+      google_terrain: L.tileLayer('/api/tiles/google_terrain/{z}/{x}/{y}.png', {
+        attribution: '&copy; Google Maps Terrain (High-Resolution Physical Relief)',
+        maxZoom: 20
+      }),
+      opentopo: L.tileLayer('/api/tiles/opentopo/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenTopoMap (High-Resolution Offline Topographic Contours)',
+        maxZoom: 17
+      }),
+      esri_topo: L.tileLayer('/api/tiles/esri_topo/{z}/{x}/{y}.png', {
+        attribution: '&copy; ESRI World Topo Map',
+        maxZoom: 18
+      }),
+      google_hybrid: L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+        attribution: '&copy; Google Maps Satellite Hybrid',
+        maxZoom: 20
+      }),
+      dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; CARTO Dark Matter',
+        subdomains: 'abcd',
+        maxZoom: 19
+      })
+    };
+
+    // Default main view: Google Terrain
+    let activeBasemap = basemaps.google_terrain.addTo(map);
+
+    // Multidirectional 3D Hillshade Relief Overlay
+    const hillshadeLayer = L.tileLayer('/api/tiles/hillshade/{z}/{x}/{y}.png', {
+      attribution: '&copy; ESRI World Hillshade (High-Res 3D Relief)',
+      maxZoom: 18,
+      opacity: 0.55
+    }).addTo(map);
+
+    // Crop to Oman Sovereign Borders Mask
+    let cropMaskLayer = null;
+
+    async function loadCropMask() {
+      try {
+        const res = await fetch('/api/mask');
+        const data = await res.json();
+        cropMaskLayer = L.geoJSON(data, {
+          pane: 'cropMaskPane',
+          interactive: false,
+          style: {
+            fillColor: '#090d16',   // Exactly matches dark canvas background
+            fillOpacity: 1.0,       // 100% solid mask outside Oman
+            color: '#ffffff',       // Sovereign cutline border
+            weight: 1.5,
+            opacity: 0.6
+          }
+        }).addTo(map);
+      } catch (err) {
+        console.error("Failed to load crop mask", err);
+      }
+    }
+
+    function toggleCropMask(chk) {
+      if (chk) {
+        if (cropMaskLayer && !map.hasLayer(cropMaskLayer)) map.addLayer(cropMaskLayer);
+      } else {
+        if (cropMaskLayer && map.hasLayer(cropMaskLayer)) map.removeLayer(cropMaskLayer);
+      }
+    }
+
+    function switchBasemap(key) {
+      map.removeLayer(activeBasemap);
+      activeBasemap = basemaps[key].addTo(map);
+      activeBasemap.bringToBack();
+      document.querySelectorAll('.basemap-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById('btn-base-' + key);
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    function setHillshadeOpacity(val) {
+      const op = parseFloat(val) / 100.0;
+      hillshadeLayer.setOpacity(op);
+      const lbl = document.getElementById('lbl-hillshade-opacity');
+      if (lbl) lbl.innerText = Math.round(val) + '%';
+    }
+
+    function toggleHillshade(chk) {
+      if (chk) {
+        if (!map.hasLayer(hillshadeLayer)) map.addLayer(hillshadeLayer);
+      } else {
+        if (map.hasLayer(hillshadeLayer)) map.removeLayer(hillshadeLayer);
+      }
+    }
+
+    function flyToOmanSpot(spotKey) {
+      const spots = {
+        shams: { center: [23.237, 57.265], zoom: 12 },
+        akhdar: { center: [23.070, 57.650], zoom: 12 },
+        shab: { center: [22.840, 59.245], zoom: 13 },
+        samhan: { center: [17.150, 54.750], zoom: 11 },
+        musandam: { center: [26.050, 56.250], zoom: 11 },
+        wahiba: { center: [22.250, 58.750], zoom: 10 }
+      };
+      const s = spots[spotKey];
+      if (s) {
+        map.flyTo(s.center, s.zoom, { duration: 1.5 });
+      }
+    }
+
+    // Layer Groups
+    let terrainReliefGroup = L.layerGroup().addTo(map);
+    let terrainWadisGroup = L.layerGroup().addTo(map);
+    let terrainPeaksGroup = L.layerGroup().addTo(map);
+
+    let roadsHighwaysGroup = L.layerGroup(); // Static legacy layer unchecked by default
+    let roadsSecondaryGroup = L.layerGroup();
+    let secondaryRoadsLoaded = false;
+    let roadsTracksGroup = L.layerGroup();
+    let tracksLoaded = false;
+    let roadsResidentialGroup = L.layerGroup();
+    let residentialLoaded = false;
+
+    // SUMO Navigable Road Network & Simulation Layers
+    let sumoRoadsGroup = L.layerGroup().addTo(map);
+    let roundaboutsGroup = L.layerGroup().addTo(map);
+    let signalsGroup = L.layerGroup();
+    let exitsGroup = L.layerGroup();
+    let uturnsGroup = L.layerGroup();
+    let simVehiclesGroup = L.layerGroup().addTo(map);
+
+    let nationalLayerGroup = L.layerGroup().addTo(map);
+    let govLayerGroup = L.layerGroup().addTo(map);
+    let wilLayerGroup = L.layerGroup().addTo(map);
+    let vmsLayerGroup = L.layerGroup().addTo(map);
+    let deliveryLayerGroup = L.layerGroup().addTo(map);
+    
+    let tempMarker = null;
+    let autoTickInterval = null;
+    let wilGeoJsonLayer = null;
+    let selectedWilayatLayer = null;
+
+    function getWilayatBaseStyle(feat) {
+      return {
+        color: feat.properties.color || '#ff758f',
+        weight: 1.0,
+        dashArray: '3, 4',
+        opacity: 0.6,
+        fillColor: feat.properties.color || '#ff758f',
+        fillOpacity: 0.16
+      };
+    }
+
+    // Frameless, slight fill-based highlight on click
+    const wilayatHighlightStyle = {
+      color: '#10b981',
+      weight: 1.2,             // Thin delicate border, NO thick frame
+      dashArray: '3, 4',
+      opacity: 0.85,
+      fillColor: '#10b981',    // Soft emerald fill
+      fillOpacity: 0.36        // Slight highlight purely via fill
+    };
+
+    // Fetch and render boundaries
+    async function loadBoundaries() {
+      try {
+        const res = await fetch('/api/boundaries');
+        const data = await res.json();
+
+        const national = data.features.filter(f => f.properties.admin_level === 2);
+        const govs = data.features.filter(f => f.properties.admin_level === 4);
+        const wils = data.features.filter(f => f.properties.admin_level === 6);
+
+        document.getElementById('stat-gov-count').innerText = govs.length;
+        document.getElementById('stat-wil-count').innerText = wils.length;
+
+        // 1. National Sovereign Border Layer
+        L.geoJSON({ type: "FeatureCollection", features: national }, {
+          interactive: false,
+          style: {
+            color: '#ffffff',
+            weight: 2.5,
+            opacity: 0.95,
+            fill: false
+          }
+        }).addTo(nationalLayerGroup);
+
+        // 2. Governorates Layer (Combination of States - background only, non-interactive)
+        L.geoJSON({ type: "FeatureCollection", features: govs }, {
+          interactive: false,
+          style: (feat) => ({
+            color: feat.properties.color || '#3b82f6',
+            weight: 2.5,
+            opacity: 0.85,
+            fillColor: feat.properties.color || '#3b82f6',
+            fillOpacity: 0.10
+          })
+        }).addTo(govLayerGroup);
+
+        // 3. Wilayats Layer (States with slight frameless highlight on click)
+        wilGeoJsonLayer = L.geoJSON({ type: "FeatureCollection", features: wils }, {
+          style: getWilayatBaseStyle,
+          onEachFeature: (feat, layer) => {
+            layer.bindTooltip(`
+              <div style="font-family:'Cairo',sans-serif; text-align:center;">
+                <strong style="font-size:13px; color:#fff;">ولاية ${feat.properties.name_ar}</strong><br>
+                <span style="font-size:11px; color:#94a3b8;">Wilayat ${feat.properties.name_en}</span><br>
+                <span style="font-size:10px; color:#3b82f6;">Gov: ${feat.properties.governorate_en}</span>
+              </div>
+            `, { sticky: true });
+
+            layer.on('mouseover', () => {
+              if (selectedWilayatLayer !== layer) {
+                layer.setStyle({ fillOpacity: 0.28 });
+              }
+            });
+
+            layer.on('mouseout', () => {
+              if (selectedWilayatLayer !== layer) {
+                wilGeoJsonLayer.resetStyle(layer);
+              }
+            });
+
+            layer.on('click', (e) => {
+              L.DomEvent.stopPropagation(e);
+
+              // Close tooltip immediately so no floating box frame remains
+              layer.closeTooltip();
+
+              // Clear temporary point marker if any
+              if (tempMarker) {
+                map.removeLayer(tempMarker);
+                tempMarker = null;
+              }
+
+              // Reset previous selected layer if any
+              if (selectedWilayatLayer && selectedWilayatLayer !== layer) {
+                wilGeoJsonLayer.resetStyle(selectedWilayatLayer);
+              }
+
+              // Apply slight frameless highlight
+              selectedWilayatLayer = layer;
+              layer.setStyle(wilayatHighlightStyle);
+
+              // Update badge in sidebar
+              const badge = document.getElementById('badge-selection-status');
+              if (badge) {
+                badge.innerText = feat.properties.name_ar + ' (' + feat.properties.name_en + ')';
+                badge.className = 'badge badge-success';
+              }
+
+              displayGeocodeResult({
+                country: 'Sultanate of Oman',
+                country_ar: 'سلطنة عمان',
+                governorate: feat.properties.governorate_en,
+                governorate_ar: feat.properties.governorate_ar,
+                wilayat: feat.properties.name_en,
+                wilayat_ar: feat.properties.name_ar
+              });
+            });
+          }
+        }).addTo(wilLayerGroup);
+
+      } catch (err) {
+        console.error("Failed to load boundaries", err);
+      }
+    }
+
+    // Reverse Geocode on map click
+    map.on('click', async (e) => {
+      // Clear selected state highlight if clicking outside
+      if (selectedWilayatLayer && wilGeoJsonLayer) {
+        wilGeoJsonLayer.resetStyle(selectedWilayatLayer);
+        selectedWilayatLayer = null;
+        const badge = document.getElementById('badge-selection-status');
+        if (badge) {
+          badge.innerText = 'Click to Highlight';
+          badge.className = 'badge badge-info';
+        }
+      }
+
+      const { lat, lng } = e.latlng;
+      if (tempMarker) map.removeLayer(tempMarker);
+      tempMarker = L.circleMarker([lat, lng], {
+        radius: 7,
+        color: '#10b981',
+        fillColor: '#34d399',
+        fillOpacity: 0.9
+      }).addTo(map);
+
+      try {
+        const res = await fetch(`/api/geocode/reverse?lat=${lat}&lng=${lng}`);
+        const data = await res.json();
+        displayGeocodeResult(data);
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    function displayGeocodeResult(data) {
+      const box = document.getElementById('geocode-result');
+      const elev = data.elevation || {};
+      const road = data.nearest_road;
+      box.innerHTML = `
+        <div style="color:#10b981; font-weight:700; margin-bottom:4px;">📍 Resolved Location</div>
+        <div><strong>Country:</strong> ${data.country} (${data.country_ar})</div>
+        <div><strong>Governorate:</strong> ${data.governorate} (${data.governorate_ar || ''})</div>
+        <div><strong>State (Wilayat):</strong> ${data.wilayat} (${data.wilayat_ar || ''})</div>
+        ${road ? `
+        <div style="margin-top:6px; padding-top:6px; border-top:1px solid #334155; font-size:0.75rem;">
+          <div><strong style="color:#f59e0b;">🛣️ Nearest Highway:</strong> ${road.name_ar || road.name} (${road.name_en || ''})</div>
+          <div style="display:flex; justify-content:space-between; margin-top:2px;">
+            <span><strong>Type:</strong> ${road.category || ''}</span>
+            <span style="color:#10b981; font-weight:700;">${road.speed_limit_kmh} km/h Limit</span>
+          </div>
+          <div style="color:var(--text-muted); font-size:0.72rem; margin-top:1px;">
+            Distance: ${road.distance_meters} m • Lanes: ${road.lanes} • Surface: ${road.surface}
+          </div>
+        </div>
+        ` : ''}
+        ${elev.elevation_meters !== undefined ? `
+        <div style="margin-top:6px; padding-top:6px; border-top:1px solid #334155; font-size:0.75rem;">
+          <div><strong>Elevation:</strong> <span style="color:#10b981; font-weight:700;">${elev.elevation_meters} m</span> (${elev.terrain_type || ''})</div>
+          <div><strong>Nearest Summit:</strong> ${elev.closest_summit_ar || elev.closest_summit} (${elev.distance_to_summit_km || 0} km)</div>
+          ${elev.truck_warning && elev.truck_warning !== 'NORMAL_TERRAIN' ? `<div style="color:#f59e0b; margin-top:2px;">⚠️ <strong>Truck Advisory:</strong> ${elev.truck_warning}</div>` : ''}
+        </div>
+        ` : ''}
+      `;
+    }
+
+    // Load Roads & Highway Network
+    function getRoadStyle(feat) {
+      const p = feat.properties;
+      return {
+        color: p.color || '#3b82f6',
+        weight: p.weight || 2.6,
+        opacity: 0.92,
+        dashArray: p.dash || null,
+        lineCap: 'round',
+        lineJoin: 'round'
+      };
+    }
+
+    async function loadRoads() {
+      try {
+        const res = await fetch('/api/roads/highways');
+        const data = await res.json();
+        
+        L.geoJSON(data, {
+          style: getRoadStyle,
+          onEachFeature: (feat, layer) => {
+            const p = feat.properties;
+            layer.bindTooltip(`
+              <div style="font-family:'Cairo',sans-serif; text-align:center;">
+                <strong style="color:${p.color}; font-size:12px;">🛣️ ${p.name_ar}</strong><br>
+                <span style="color:#cbd5e1; font-size:11px;">${p.name_en}</span><br>
+                <span style="color:#fbbf24; font-size:10px; font-weight:700;">السرعة القصوى: ${p.speed_limit_kmh} كم/س | ${p.lanes} حارات</span>
+              </div>
+            `, { sticky: true });
+
+            layer.on('mouseover', () => {
+              layer.setStyle({ weight: p.weight + 2, opacity: 1.0 });
+            });
+            layer.on('mouseout', () => {
+              layer.setStyle(getRoadStyle(feat));
+            });
+            layer.on('click', (e) => {
+              L.DomEvent.stopPropagation(e);
+              displayGeocodeResult({
+                country: 'Sultanate of Oman',
+                country_ar: 'سلطنة عمان',
+                governorate: p.governorate || 'National Highway Corridor',
+                governorate_ar: p.governorate || 'طريق وطني رئيسي',
+                wilayat: p.wilayat || 'Expressway',
+                wilayat_ar: p.wilayat || 'محور سريع',
+                nearest_road: {
+                  name: p.name,
+                  name_ar: p.name_ar,
+                  name_en: p.name_en,
+                  category: p.category,
+                  speed_limit_kmh: p.speed_limit_kmh,
+                  lanes: p.lanes,
+                  surface: p.surface,
+                  distance_meters: 0
+                }
+              });
+            });
+          }
+        }).addTo(roadsHighwaysGroup);
+
+      } catch (err) {
+        console.error("Failed to load highways", err);
+      }
+    }
+
+    async function toggleRoadLayer(type) {
+      if (type === 'highways') {
+        const chk = document.getElementById('chk-roads-highways').checked;
+        if (chk) map.addLayer(roadsHighwaysGroup); else map.removeLayer(roadsHighwaysGroup);
+      } else if (type === 'secondary') {
+        const chk = document.getElementById('chk-roads-secondary').checked;
+        if (chk) {
+          if (!secondaryRoadsLoaded) {
+            try {
+              const res = await fetch('/api/roads/secondary');
+              const data = await res.json();
+              L.geoJSON(data, {
+                style: getRoadStyle,
+                onEachFeature: (feat, layer) => {
+                  const p = feat.properties;
+                  layer.bindTooltip(`
+                    <div style="font-family:'Cairo',sans-serif; text-align:center;">
+                      <strong style="color:#a855f7; font-size:11px;">🚗 ${p.name_ar}</strong><br>
+                      <span style="color:#cbd5e1; font-size:10px;">${p.name_en}</span><br>
+                      <span style="color:#fbbf24; font-size:9.5px;">السرعة: ${p.speed_limit_kmh} كم/س</span>
+                    </div>
+                  `, { sticky: true });
+                }
+              }).addTo(roadsSecondaryGroup);
+              secondaryRoadsLoaded = true;
+            } catch (e) {
+              console.error(e);
+            }
+          }
+          map.addLayer(roadsSecondaryGroup);
+        } else {
+          map.removeLayer(roadsSecondaryGroup);
+        }
+      } else if (type === 'tracks') {
+        const chk = document.getElementById('chk-roads-tracks').checked;
+        if (chk) {
+          if (!tracksLoaded) {
+            try {
+              const res = await fetch('/api/roads/tracks');
+              const data = await res.json();
+              L.geoJSON(data, {
+                style: (feat) => ({
+                  color: '#d97706',
+                  weight: 1.8,
+                  dashArray: '4, 4',
+                  opacity: 0.85
+                }),
+                onEachFeature: (feat, layer) => {
+                  const p = feat.properties;
+                  layer.bindTooltip(`
+                    <div style="font-family:'Cairo',sans-serif; text-align:center;">
+                      <strong style="color:#d97706; font-size:11px;">🏜️ ${p.name_ar}</strong><br>
+                      <span style="color:#cbd5e1; font-size:9.5px;">${p.name_en}</span><br>
+                      <span style="color:#fbbf24; font-size:9px;">مسار ترابي / وادي (4WD Required)</span>
+                    </div>
+                  `, { sticky: true });
+                }
+              }).addTo(roadsTracksGroup);
+              tracksLoaded = true;
+            } catch (e) {
+              console.error(e);
+            }
+          }
+          map.addLayer(roadsTracksGroup);
+        } else {
+          map.removeLayer(roadsTracksGroup);
+        }
+      } else if (type === 'residential') {
+        const chk = document.getElementById('chk-roads-residential').checked;
+        if (chk) {
+          if (!residentialLoaded) {
+            try {
+              const res = await fetch('/api/roads/residential');
+              const data = await res.json();
+              L.geoJSON(data, {
+                style: (feat) => ({
+                  color: '#94a3b8',
+                  weight: 1.3,
+                  opacity: 0.8
+                }),
+                onEachFeature: (feat, layer) => {
+                  const p = feat.properties;
+                  layer.bindTooltip(`
+                    <div style="font-family:'Cairo',sans-serif; text-align:center;">
+                      <strong style="color:#fff; font-size:11px;">🏡 ${p.name_ar}</strong><br>
+                      <span style="color:#cbd5e1; font-size:10px;">${p.name_en}</span><br>
+                      <span style="color:#38bdf8; font-size:9px;">السرعة: ${p.speed_limit_kmh} كم/س</span>
+                    </div>
+                  `, { sticky: true });
+                }
+              }).addTo(roadsResidentialGroup);
+              residentialLoaded = true;
+            } catch (e) {
+              console.error(e);
+            }
+          }
+          map.addLayer(roadsResidentialGroup);
+        } else {
+          map.removeLayer(roadsResidentialGroup);
+        }
+      }
+    }
+
+    function flyToRoad(roadKey) {
+      const routes = {
+        muscat_exp: { center: [23.58, 58.35], zoom: 12 },
+        batinah: { center: [23.85, 57.50], zoom: 10 },
+        nizwa_salalah: { center: [21.50, 56.20], zoom: 8 },
+        sur_coastal: { center: [22.85, 59.20], zoom: 10 },
+        duqm_corridor: { center: [19.90, 57.50], zoom: 10 },
+        buraimi: { center: [24.15, 56.00], zoom: 10 }
+      };
+      const r = routes[roadKey];
+      if (r) {
+        map.flyTo(r.center, r.zoom, { duration: 1.5 });
+      }
+    }
+
+    // Load Terrain, Elevation Relief, Summits & Wadis
+    async function loadTerrain() {
+      try {
+        const res = await fetch('/api/terrain');
+        const data = await res.json();
+
+        // 1. Mountain Peaks & Summits (High-Res Points of Interest)
+        const peaks = data.features.filter(f => f.properties.category === 'Mountain Peak');
+        peaks.forEach(p => {
+          const coords = p.geometry.coordinates;
+          const marker = L.marker([coords[1], coords[0]], {
+            icon: L.divIcon({
+              className: 'peak-icon-container',
+              html: `<div class="peak-marker-pill">▲ ${p.properties.name_ar} ${p.properties.elevation_m}m</div>`,
+              iconSize: [120, 22],
+              iconAnchor: [60, 11]
+            })
+          });
+
+          marker.bindTooltip(`
+            <div style="font-family:'Cairo',sans-serif; text-align:center;">
+              <strong style="color:#fbbf24; font-size:13px;">⛰️ ${p.properties.name_ar}</strong><br>
+              <span style="font-size:11px; color:#fff;">${p.properties.name_en}</span><br>
+              <span style="font-size:12px; font-weight:700; color:#10b981;">الارتفاع: ${p.properties.elevation_m} متر</span><br>
+              <span style="font-size:10px; color:#94a3b8;">${p.properties.range_ar}</span>
+            </div>
+          `, { sticky: true });
+
+          marker.on('click', (e) => {
+            L.DomEvent.stopPropagation(e);
+            map.setView([coords[1], coords[0]], 11);
+          });
+
+          marker.addTo(terrainPeaksGroup);
+        });
+
+        // 3. Wadis & Canyons
+        const wadis = data.features.filter(f => f.properties.category === 'Wadi / Valley');
+        wadis.forEach(w => {
+          const latLngs = w.geometry.coordinates.map(c => [c[1], c[0]]);
+          const polyline = L.polyline(latLngs, {
+            color: '#38bdf8',
+            weight: 3.2,
+            dashArray: '5, 5',
+            opacity: 0.9
+          });
+
+          polyline.bindTooltip(`
+            <div style="font-family:'Cairo',sans-serif; text-align:center;">
+              <strong style="color:#38bdf8; font-size:12px;">🌊 ${w.properties.name_ar}</strong><br>
+              <span style="font-size:10px; color:#fff;">${w.properties.name_en}</span><br>
+              <span style="font-size:9.5px; color:#cbd5e1;">${w.properties.description}</span>
+            </div>
+          `, { sticky: true });
+
+          polyline.addTo(terrainWadisGroup);
+        });
+
+      } catch (err) {
+        console.error("Failed to load terrain", err);
+      }
+    }
+
+    function toggleTerrainLayer(type) {
+      if (type === 'peaks') {
+        const chk = document.getElementById('chk-terrain-peaks').checked;
+        if (chk) map.addLayer(terrainPeaksGroup); else map.removeLayer(terrainPeaksGroup);
+      } else if (type === 'wadis') {
+        const chk = document.getElementById('chk-terrain-wadis').checked;
+        if (chk) map.addLayer(terrainWadisGroup); else map.removeLayer(terrainWadisGroup);
+      }
+    }
+
+    function toggleLayer(type) {
+      if (type === 'govs') {
+        const chk = document.getElementById('chk-govs').checked;
+        if (chk) map.addLayer(govLayerGroup); else map.removeLayer(govLayerGroup);
+      } else if (type === 'wils') {
+        const chk = document.getElementById('chk-wils').checked;
+        if (chk) map.addLayer(wilLayerGroup); else map.removeLayer(wilLayerGroup);
+      } else if (type === 'national') {
+        const chk = document.getElementById('chk-national').checked;
+        if (chk) map.addLayer(nationalLayerGroup); else map.removeLayer(nationalLayerGroup);
+      }
+    }
+
+    // VMS Fleet Telematics
+    async function loadVmsFleet() {
+      try {
+        const res = await fetch('/api/vms/vehicles');
+        const data = await res.json();
+        vmsLayerGroup.clearLayers();
+
+        const listContainer = document.getElementById('vehicles-list');
+        listContainer.innerHTML = '';
+
+        data.vehicles.forEach(v => {
+          const isAlert = v.speed_status === 'OVERSPEED_ALERT';
+          const markerColor = isAlert ? '#ef4444' : '#10b981';
+
+          // Add Vehicle Marker to Map
+          const marker = L.circleMarker([v.coordinates.lat, v.coordinates.lng], {
+            radius: 8,
+            color: '#fff',
+            weight: 2,
+            fillColor: markerColor,
+            fillOpacity: 1
+          }).addTo(vmsLayerGroup);
+
+          marker.bindPopup(`
+            <div style="font-family:sans-serif; min-width:200px;">
+              <strong style="color:${markerColor}; font-size:13px;">${v.label}</strong><br>
+              <strong>ID:</strong> ${v.id} • <strong>Driver:</strong> ${v.driver}<br>
+              <strong>Highway:</strong> <span style="color:#f59e0b;">${v.current_road_ar || v.current_road}</span><br>
+              <strong>Location:</strong> ${v.current_wilayat}, ${v.current_governorate}<br>
+              <strong>Speed:</strong> <span style="font-weight:700; color:${isAlert ? '#ef4444' : '#10b981'};">${v.speed_kmh} km/h</span> (Limit: ${v.speed_limit_kmh} km/h)<br>
+              <strong>Status:</strong> ${v.speed_status}
+            </div>
+          `);
+
+          // Populate Sidebar List
+          const div = document.createElement('div');
+          div.className = 'vehicle-row';
+          div.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:600; font-size:0.82rem;">${v.label}</span>
+              <span class="badge ${isAlert ? 'badge-danger' : 'badge-success'}">${v.speed_kmh} km/h</span>
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">
+              🛣️ <strong>${v.current_road_ar || v.current_road}</strong> • ${v.current_wilayat}
+            </div>
+            <div style="font-size:0.72rem; color:var(--text-muted); margin-top:1px;">
+              Driver: ${v.driver} • Legal Limit: ${v.speed_limit_kmh} km/h
+            </div>
+            ${isAlert ? '<div style="color:#ef4444; font-size:0.72rem; margin-top:3px; font-weight:600;">⚠️ Overspeed Alert! Exceeded ' + v.speed_limit_kmh + ' km/h</div>' : ''}
+          `;
+          div.onclick = () => {
+            map.setView([v.coordinates.lat, v.coordinates.lng], 10);
+            marker.openPopup();
+          };
+          listContainer.appendChild(div);
+        });
+      } catch (err) {
+        console.error("Failed to load VMS fleet", err);
+      }
+    }
+
+    async function tickSimulation() {
+      await fetch('/api/vms/tick', { method: 'POST' });
+      await loadVmsFleet();
+    }
+
+    function toggleAutoTick() {
+      const btn = document.getElementById('btn-auto-tick');
+      if (autoTickInterval) {
+        clearInterval(autoTickInterval);
+        autoTickInterval = null;
+        btn.innerText = '▶ Start Real-Time Stream (2s)';
+        btn.className = 'btn btn-secondary';
+      } else {
+        autoTickInterval = setInterval(tickSimulation, 2000);
+        btn.innerText = '⏸ Pause Stream';
+        btn.className = 'btn btn-secondary';
+      }
+    }
+
+    // Delivery Route API
+    async function loadDeliveryRoute() {
+      try {
+        const res = await fetch('/api/delivery/route');
+        const data = await res.json();
+        deliveryLayerGroup.clearLayers();
+
+        document.getElementById('del-route-id').innerText = data.route_id;
+
+        // Draw Route Polyline
+        const latLngs = data.geometry.coordinates.map(c => [c[1], c[0]]);
+        L.polyline(latLngs, {
+          color: '#3b82f6',
+          weight: 4,
+          opacity: 0.9,
+          dashArray: '6, 6'
+        }).addTo(deliveryLayerGroup);
+
+        // Render Stops
+        const stopsContainer = document.getElementById('delivery-stops');
+        stopsContainer.innerHTML = '';
+
+        data.stops.forEach(s => {
+          L.circleMarker([s.lat, s.lng], {
+            radius: 6,
+            color: '#fff',
+            weight: 2,
+            fillColor: '#3b82f6',
+            fillOpacity: 1
+          }).bindPopup(`<strong>Stop ${s.seq}: ${s.name}</strong><br>${s.name_ar}<br>ETA: ${s.eta}`).addTo(deliveryLayerGroup);
+
+          const item = document.createElement('div');
+          item.className = 'stop-item';
+          item.innerHTML = `
+            <div style="font-weight:600; font-size:0.8rem;">Stop ${s.seq}: ${s.name}</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">${s.name_ar}</div>
+            <div style="font-size:0.72rem; margin-top:2px;">
+              <span class="badge ${s.status === 'COMPLETED' ? 'badge-success' : (s.status === 'IN_PROGRESS' ? 'badge-warning' : 'badge-info')}">${s.status}</span>
+              <span style="color:var(--text-muted); margin-left:6px;">ETA: ${s.eta}</span>
+            </div>
+          `;
+          stopsContainer.appendChild(item);
+        });
+
+      } catch (err) {
+        console.error("Failed to load delivery route", err);
+      }
+    }
+
+    function focusDeliveryRoute() {
+      map.setView([23.61, 58.35], 11);
+    }
+
+    // ==========================================
+    // SUMO ROAD NETWORK VIEWPORT LOADER
+    // ==========================================
+    let sumoRoadAbort = null;
+    let sumoRoadTimer = null;
+
+    function toggleSumoRoadLayer(chk) {
+      if (chk) {
+        if (!map.hasLayer(sumoRoadsGroup)) map.addLayer(sumoRoadsGroup);
+        fetchSumoRoadsInView();
+      } else {
+        if (map.hasLayer(sumoRoadsGroup)) map.removeLayer(sumoRoadsGroup);
+      }
+    }
+
+    // --- Client-side edge tile cache ---
+    // Roads are requested as fixed z/x/y tiles, so panning back over an area reuses
+    // already-built layers instantly instead of refetching and re-rendering.
+    const EDGE_MIN_ZOOM = 8, EDGE_MAX_TILE_ZOOM = 15, EDGE_CACHE_MAX = 600;
+    const edgeTileCache = new Map();   // key -> L.GeoJSON layer (insertion order = LRU)
+    const edgeTilePending = new Map(); // key -> Promise
+    let edgeViewToken = 0;
+
+    function sumoRoadStyle(feat) {
+      const hw = feat.properties.highway || '';
+      if (feat.properties.is_roundabout) return { color: '#10b981', weight: 4.0, opacity: 0.95 };
+      if (hw === 'motorway' || hw === 'motorway_link') return { color: '#f59e0b', weight: 3.5, opacity: 0.95 };
+      if (hw === 'trunk' || hw === 'trunk_link') return { color: '#ef4444', weight: 3.2, opacity: 0.9 };
+      if (hw === 'primary' || hw === 'primary_link') return { color: '#06b6d4', weight: 2.8, opacity: 0.85 };
+      if (hw === 'secondary' || hw === 'secondary_link') return { color: '#a855f7', weight: 2.2, opacity: 0.8 };
+      if (hw === 'tertiary' || hw === 'tertiary_link') return { color: '#64748b', weight: 1.8, opacity: 0.75 };
+      if (hw === 'track') return { color: '#d97706', weight: 1.6, opacity: 0.85, dashArray: '4, 4' };
+      return { color: '#94a3b8', weight: 1.4, opacity: 0.65 };
+    }
+
+    function sumoRoadPopup(layer) {
+      const p = layer.feature.properties;
+      const nameDisplay = (p.name_ar && p.name ? `${p.name_ar} (${p.name})` : (p.name_ar || p.name || 'Road Segment'));
+      return `
+        <div style="font-family:Inter,Cairo,sans-serif; min-width:210px;">
+          <div style="font-weight:700; font-size:13px; color:#fff; border-bottom:1px solid #334155; padding-bottom:4px; margin-bottom:6px;">${nameDisplay}</div>
+          <div style="font-size:11px; color:#94a3b8; line-height:1.5;">
+            <div><strong>Class:</strong> <span style="color:#38bdf8;">${p.highway}</span></div>
+            <div><strong>Speed Limit:</strong> <span style="color:#f59e0b;">${p.speed_limit_kmh > 0 ? p.speed_limit_kmh + ' km/h (OSM)' : 'Not tagged (class default)'}</span></div>
+            <div><strong>Lanes:</strong> ${p.lanes}</div>
+            <div><strong>Surface:</strong> ${p.surface || 'unspecified'}</div>
+            <div><strong>Direction:</strong> ${p.oneway ? 'One-Way Carriageway' : 'Two-Way Road'}</div>
+          </div>
+        </div>`;
+    }
+
+    function edgeTilesForView() {
+      const z = Math.min(Math.round(map.getZoom()), EDGE_MAX_TILE_ZOOM);
+      const b = map.getBounds().pad(0.25); // prefetch a margin around the viewport
+      const n = Math.pow(2, z);
+      const lng2x = lng => Math.floor((lng + 180) / 360 * n);
+      const lat2y = lat => {
+        const r = lat * Math.PI / 180;
+        return Math.floor((1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * n);
+      };
+      const keys = [];
+      for (let x = lng2x(b.getWest()); x <= lng2x(b.getEast()); x++)
+        for (let y = lat2y(b.getNorth()); y <= lat2y(b.getSouth()); y++)
+          keys.push(`${z}/${x}/${y}`);
+      return keys;
+    }
+
+    function loadEdgeTile(key) {
+      if (edgeTileCache.has(key)) {
+        const layer = edgeTileCache.get(key);
+        edgeTileCache.delete(key); edgeTileCache.set(key, layer); // mark as recently used
+        return Promise.resolve(layer);
+      }
+      if (edgeTilePending.has(key)) return edgeTilePending.get(key);
+      const p = fetch(`/api/network/edges/tile/${key}.json`)
+        .then(r => r.json())
+        .then(data => {
+          const layer = L.geoJSON(data, { style: sumoRoadStyle, renderer: roadsCanvasRenderer });
+          layer.bindPopup(sumoRoadPopup); // popup HTML built lazily on click
+          edgeTileCache.set(key, layer);
+          while (edgeTileCache.size > EDGE_CACHE_MAX) {
+            const [oldKey, oldLayer] = edgeTileCache.entries().next().value;
+            sumoRoadsGroup.removeLayer(oldLayer);
+            edgeTileCache.delete(oldKey);
+          }
+          return layer;
+        })
+        .finally(() => edgeTilePending.delete(key));
+      edgeTilePending.set(key, p);
+      return p;
+    }
+
+    async function fetchSumoRoadsInView() {
+      const chk = document.getElementById('chk-sumo-roads');
+      if (chk && !chk.checked) return;
+      const token = ++edgeViewToken;
+
+      if (map.getZoom() < EDGE_MIN_ZOOM) { sumoRoadsGroup.clearLayers(); return; }
+
+      const wanted = new Set(edgeTilesForView());
+      // Drop layers that are off-screen or from another zoom (they stay in cache for reuse)
+      sumoRoadsGroup.eachLayer(l => { if (!wanted.has(l._edgeKey)) sumoRoadsGroup.removeLayer(l); });
+
+      await Promise.all([...wanted].map(key =>
+        loadEdgeTile(key).then(layer => {
+          if (token !== edgeViewToken) return; // user moved on; don't add stale tiles
+          layer._edgeKey = key;
+          if (!sumoRoadsGroup.hasLayer(layer)) sumoRoadsGroup.addLayer(layer);
+        }).catch(err => console.error('Edge tile failed', key, err))
+      ));
+    }
+
+    // Debounced Map Move Listener
+    map.on('moveend', () => {
+      clearTimeout(sumoRoadTimer);
+      sumoRoadTimer = setTimeout(fetchSumoRoadsInView, 120);
+    });
+
+    // ==========================================
+    // TOPOLOGY FEATURE LAYERS
+    // ==========================================
+    let pointFeaturesLoaded = false;
+
+    async function loadPointFeatures() {
+      if (pointFeaturesLoaded) return;
+      try {
+        // 1. Roundabouts
+        const resRb = await fetch('/api/network/features?type=roundabout&limit=1500');
+        const dataRb = await resRb.json();
+        dataRb.features.forEach(f => {
+          const [lon, lat] = f.geometry.coordinates;
+          const marker = L.circleMarker([lat, lon], {
+            radius: 6,
+            fillColor: '#10b981',
+            color: '#ffffff',
+            weight: 1.5,
+            fillOpacity: 0.9
+          });
+          marker.bindPopup(`<strong>🔄 Roundabout (دوار)</strong><br>${f.properties.name || 'Roundabout'}`);
+          roundaboutsGroup.addLayer(marker);
+        });
+
+        // 2. Traffic Signals
+        const resSig = await fetch('/api/network/features?type=traffic_signal&limit=500');
+        const dataSig = await resSig.json();
+        dataSig.features.forEach(f => {
+          const [lon, lat] = f.geometry.coordinates;
+          const marker = L.circleMarker([lat, lon], {
+            radius: 5,
+            fillColor: '#f59e0b',
+            color: '#ffffff',
+            weight: 1.2,
+            fillOpacity: 0.95
+          });
+          marker.bindPopup(`<strong>🚦 Traffic Signal (إشارة مرورية)</strong><br>${f.properties.name || 'Junction Signal'}`);
+          signalsGroup.addLayer(marker);
+        });
+
+        // 3. Motorway Exits
+        const resEx = await fetch('/api/network/features?type=motorway_exit&limit=600');
+        const dataEx = await resEx.json();
+        dataEx.features.forEach(f => {
+          const [lon, lat] = f.geometry.coordinates;
+          const marker = L.circleMarker([lat, lon], {
+            radius: 5,
+            fillColor: '#3b82f6',
+            color: '#ffffff',
+            weight: 1.2,
+            fillOpacity: 0.95
+          });
+          marker.bindPopup(`<strong>🛣️ Motorway Junction / Exit</strong><br>${f.properties.name || 'Exit'}`);
+          exitsGroup.addLayer(marker);
+        });
+
+        // 4. U-turns
+        const resUt = await fetch('/api/network/features?type=uturn&limit=1000');
+        const dataUt = await resUt.json();
+        dataUt.features.forEach(f => {
+          const [lon, lat] = f.geometry.coordinates;
+          const marker = L.circleMarker([lat, lon], {
+            radius: 4,
+            fillColor: '#a855f7',
+            color: '#ffffff',
+            weight: 1.0,
+            fillOpacity: 0.9
+          });
+          marker.bindPopup(`<strong>↩️ U-Turn Slot (فتحة دوران للخلف)</strong><br>${f.properties.name || 'U-Turn'}`);
+          uturnsGroup.addLayer(marker);
+        });
+
+        pointFeaturesLoaded = true;
+      } catch (err) {
+        console.error("Failed to load point features", err);
+      }
+    }
+
+    function toggleFeatureLayer(type, chk) {
+      if (type === 'roundabouts') {
+        if (chk) map.addLayer(roundaboutsGroup); else map.removeLayer(roundaboutsGroup);
+      } else if (type === 'signals') {
+        if (chk) map.addLayer(signalsGroup); else map.removeLayer(signalsGroup);
+      } else if (type === 'exits') {
+        if (chk) map.addLayer(exitsGroup); else map.removeLayer(exitsGroup);
+      } else if (type === 'uturns') {
+        if (chk) map.addLayer(uturnsGroup); else map.removeLayer(uturnsGroup);
+      }
+    }
+
+    // ==========================================
+    // MUSCAT MICROSCOPIC TRAFFIC SIMULATION
+    // ==========================================
+    let simData = null;
+    let simPlaying = false;
+    let simCurrentFrame = 0;
+    let simPlaySpeed = 1.0;
+    let simTimer = null;
+    const vehicleMarkers = new Map();
+
+    async function initTrafficSimulation() {
+      try {
+        const res = await fetch('/api/sim/muscat');
+        simData = await res.json();
+        const slider = document.getElementById('sim-slider');
+        if (slider) {
+          slider.max = simData.total_frames - 1;
+          slider.value = 0;
+        }
+        updateSimulationFrame(0);
+      } catch (err) {
+        console.error("Failed to load traffic simulation data", err);
+      }
+    }
+
+    function updateSimulationFrame(frameIdx) {
+      if (!simData || !simData.frames || frameIdx >= simData.frames.length) return;
+      simCurrentFrame = frameIdx;
+      const frame = simData.frames[frameIdx];
+
+      const slider = document.getElementById('sim-slider');
+      if (slider) slider.value = frameIdx;
+      const timeLbl = document.getElementById('sim-time-lbl');
+      if (timeLbl) {
+        const sec = frame.t;
+        const m = Math.floor(sec / 60);
+        const s = sec % 60;
+        timeLbl.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      }
+
+      const activeLbl = document.getElementById('sim-active-vehicles');
+      if (activeLbl) activeLbl.innerText = frame.v.length;
+
+      const currentIds = new Set();
+      frame.v.forEach(v => {
+        const [vid, lon, lat, angle, spd] = v;
+        currentIds.add(vid);
+
+        const col = spd >= 60 ? '#10b981' : (spd >= 30 ? '#f59e0b' : '#ef4444');
+        const svgIcon = L.divIcon({
+          className: 'sim-vehicle-icon',
+          html: `<div style="transform: rotate(${angle}deg); width:14px; height:14px; display:flex; align-items:center; justify-content:center;">
+                   <svg width="14" height="14" viewBox="0 0 24 24" fill="${col}" stroke="#ffffff" stroke-width="1.5">
+                     <polygon points="12,2 22,22 12,17 2,22"/>
+                   </svg>
+                 </div>`,
+          iconSize: [14, 14],
+          iconAnchor: [7, 7]
+        });
+
+        if (vehicleMarkers.has(vid)) {
+          const marker = vehicleMarkers.get(vid);
+          marker.setLatLng([lat, lon]);
+          marker.setIcon(svgIcon);
+        } else {
+          const marker = L.marker([lat, lon], { icon: svgIcon });
+          marker.bindTooltip(`Vehicle #${vid}<br>Speed: ${spd} km/h`, { direction: 'top', offset: [0, -7] });
+          marker.addTo(simVehiclesGroup);
+          vehicleMarkers.set(vid, marker);
+        }
+      });
+
+      for (const [vid, marker] of vehicleMarkers.entries()) {
+        if (!currentIds.has(vid)) {
+          simVehiclesGroup.removeLayer(marker);
+          vehicleMarkers.delete(vid);
+        }
+      }
+    }
+
+    function toggleSimPlay() {
+      simPlaying = !simPlaying;
+      const btn = document.getElementById('btn-sim-play');
+      if (simPlaying) {
+        if (btn) btn.innerHTML = '⏸️ Pause';
+        runSimLoop();
+      } else {
+        if (btn) btn.innerHTML = '▶️ Play';
+        clearTimeout(simTimer);
+      }
+    }
+
+    function runSimLoop() {
+      if (!simPlaying || !simData) return;
+      let next = simCurrentFrame + 1;
+      if (next >= simData.total_frames) next = 0;
+      updateSimulationFrame(next);
+      const interval = (simData.sample_interval * 1000) / (simPlaySpeed * 4);
+      simTimer = setTimeout(runSimLoop, Math.max(30, interval));
+    }
+
+    function resetSim() {
+      simPlaying = false;
+      clearTimeout(simTimer);
+      const btn = document.getElementById('btn-sim-play');
+      if (btn) btn.innerHTML = '▶️ Play';
+      updateSimulationFrame(0);
+    }
+
+    function setSimSpeed(sp) {
+      simPlaySpeed = sp;
+      document.querySelectorAll('.sim-spd-btn').forEach(b => b.classList.remove('active'));
+      const btn = document.getElementById('btn-spd-' + sp);
+      if (btn) btn.classList.add('active');
+    }
+
+    function onSimSliderInput(val) {
+      updateSimulationFrame(parseInt(val, 10));
+    }
+
+    function focusMuscatSimulation() {
+      switchTab('traffic');
+      map.flyTo([23.588, 58.382], 12, { duration: 1.5 });
+    }
+
+    // Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+      if (tabId === 'borders') {
+        document.querySelector("button[onclick=\"switchTab('borders')\"]").classList.add('active');
+        document.getElementById('tab-borders').classList.add('active');
+        map.setView([21.5, 57.0], 6);
+      } else if (tabId === 'traffic') {
+        document.querySelector("button[onclick=\"switchTab('traffic')\"]").classList.add('active');
+        document.getElementById('tab-traffic').classList.add('active');
+        if (!simData) initTrafficSimulation();
+        fetchSumoRoadsInView();
+      } else if (tabId === 'vms') {
+        document.querySelector("button[onclick=\"switchTab('vms')\"]").classList.add('active');
+        document.getElementById('tab-vms').classList.add('active');
+        loadVmsFleet();
+      } else if (tabId === 'delivery') {
+        document.querySelector("button[onclick=\"switchTab('delivery')\"]").classList.add('active');
+        document.getElementById('tab-delivery').classList.add('active');
+        loadDeliveryRoute();
+        focusDeliveryRoute();
+      }
+    }
+
+    // ==========================================
+    // CLIENT CACHE CONTROLLER & PRELOADER
+    // ==========================================
+    function updateCacheStatsUI() {
+      const vecCount = edgeTileCache.size;
+      const elVec = document.getElementById('stat-vector-cache');
+      if (elVec) elVec.innerText = `${vecCount} Cached`;
+
+      // Query server multi-tier cache metrics
+      fetch('/api/cache/stats')
+        .then(r => r.json())
+        .then(data => {
+          const elRam = document.getElementById('stat-ram-cache');
+          if (elRam) elRam.innerText = `${data.tier1_ram_raster_tiles} in RAM`;
+        })
+        .catch(() => {});
+    }
+
+    async function preloadCurrentViewport() {
+      const btn = document.getElementById('btn-preload-view');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = '⏳ Pre-buffering...';
+      }
+
+      const z = Math.min(Math.round(map.getZoom()), EDGE_MAX_TILE_ZOOM);
+      const b = map.getBounds().pad(0.5); // 50% wider perimeter
+      const n = Math.pow(2, z);
+      const lng2x = lng => Math.floor((lng + 180) / 360 * n);
+      const lat2y = lat => {
+        const r = lat * Math.PI / 180;
+        return Math.floor((1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * n);
+      };
+
+      const rasterPromises = [];
+      const vectorPromises = [];
+
+      for (let x = lng2x(b.getWest()); x <= lng2x(b.getEast()); x++) {
+        for (let y = lat2y(b.getNorth()); y <= lat2y(b.getSouth()); y++) {
+          rasterPromises.push(fetch(`/api/tiles/google_terrain/${z}/${x}/${y}.png`).catch(() => {}));
+          vectorPromises.push(loadEdgeTile(`${z}/${x}/${y}`).catch(() => {}));
+        }
+      }
+
+      await Promise.all([...rasterPromises, ...vectorPromises]);
+      updateCacheStatsUI();
+
+      if (btn) {
+        btn.disabled = false;
+        btn.innerText = `✅ Pre-buffered ${rasterPromises.length} Tiles`;
+        setTimeout(() => { btn.innerText = '🚀 Pre-Buffer Current View'; }, 3000);
+      }
+    }
+
+    function clearClientCache() {
+      edgeTileCache.clear();
+      sumoRoadsGroup.clearLayers();
+      fetchSumoRoadsInView();
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        const msgChan = new MessageChannel();
+        msgChan.port1.onmessage = () => {
+          updateCacheStatsUI();
+        };
+        navigator.serviceWorker.controller.postMessage({ action: 'CLEAR_CACHE' }, [msgChan.port2]);
+      } else {
+        updateCacheStatsUI();
+      }
+    }
+
+    // Register Service Worker for instant offline/browser cache storage
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+          .then(reg => {
+            console.log('Oman Map Tile Cache ServiceWorker registered:', reg.scope);
+            setInterval(updateCacheStatsUI, 4000);
+          })
+          .catch(err => {
+            console.log('ServiceWorker optional fallback:', err);
+          });
+      });
+    }
+
+    // Init On Load
+    loadBoundaries();
+    loadCropMask();
+    loadTerrain();
+    loadRoads();
+    loadVmsFleet();
+    loadDeliveryRoute();
+    loadPointFeatures();
+    initTrafficSimulation();
+    fetchSumoRoadsInView();
+    updateCacheStatsUI();
+  </script>
+</body>
+</html>

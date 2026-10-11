@@ -1,0 +1,31 @@
+# Python environment & cache
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.sqlite-shm
+*.sqlite-wal
+
+# Tile caches & temp downloads
+cache/
+network/raw/
+*.part
+
+# Large GIS raw datasets exceeding GitHub 100MB limit
+data/hotosm_roads/*.dbf
+data/hotosm_roads/*.shp
+data/hotosm_roads/*.shx
+data/hotosm_roads/*.prj
+
+# Large SUMO Networks exceeding GitHub 100MB limit
+network/muscat/muscat.net.xml
+network/muscat/fcd.xml
+network/oman.net.xml.gz
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

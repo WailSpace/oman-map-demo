@@ -1,0 +1,145 @@
+{
+  "total_edges": 2064647,
+  "drivable_edges": 665725,
+  "internal_junction_edges": 1398922,
+  "total_lanes": 700718,
+  "total_network_km": 181672.73,
+  "total_junctions": 339192,
+  "junction_types": {
+    "priority": 154223,
+    "right_before_left": 113634,
+    "dead_end": 164,
+    "traffic_light": 128,
+    "internal": 71043
+  },
+  "traffic_light_controllers": 94,
+  "roundabouts": 1487,
+  "roundabout_edges": 9226,
+  "km_by_type": {
+    "highway.track": 52177.62,
+    "highway.unclassified": 41245.76,
+    "highway.residential": 35612.31,
+    "highway.tertiary": 14663.56,
+    "highway.service": 14605.23,
+    "highway.trunk": 9837.85,
+    "highway.secondary": 5875.77,
+    "highway.primary": 5328.6,
+    "highway.motorway": 1116.3,
+    "highway.trunk_link": 553.89,
+    "highway.motorway_link": 370.98,
+    "highway.primary_link": 115.04,
+    "highway.living_street": 81.84,
+    "highway.secondary_link": 35.49,
+    "highway.tertiary_link": 32.03,
+    "highway.road": 20.47
+  },
+  "edges_by_type": {
+    "highway.primary": 15232,
+    "highway.service": 133304,
+    "highway.residential": 317233,
+    "highway.unclassified": 56121,
+    "highway.track": 49008,
+    "highway.tertiary": 55350,
+    "highway.secondary": 15883,
+    "highway.trunk_link": 3831,
+    "highway.trunk": 13382,
+    "highway.secondary_link": 724,
+    "highway.primary_link": 1674,
+    "highway.motorway": 1037,
+    "highway.tertiary_link": 942,
+    "highway.living_street": 923,
+    "highway.motorway_link": 1065,
+    "highway.road": 16
+  },
+  "turn_restrictions_source": 3364,
+  "turn_restrictions_breakdown": {
+    "only_straight_on": 1337,
+    "no_right_turn": 429,
+    "no_left_turn": 482,
+    "no_u_turn": 931,
+    "only_left_turn": 71,
+    "only_right_turn": 111,
+    "no_straight_on": 3
+  },
+  "spot_checks": {
+    "Sultan Qaboos": [],
+    "Muscat Expressway": [
+      {
+        "id": "125152717",
+        "name": "Muscat Expressway J8",
+        "type": "highway.motorway_link",
+        "lanes": 1,
+        "speed": 79.992
+      }
+    ],
+    "Nizwa": [],
+    "Salalah": [
+      {
+        "id": "-1204791257#0",
+        "name": "To Shipwreck Salalah",
+        "type": "highway.track",
+        "lanes": 1,
+        "speed": 29.988
+      },
+      {
+        "id": "-992202383#0",
+        "name": "To Shipwreck Salalah",
+        "type": "highway.track",
+        "lanes": 1,
+        "speed": 29.988
+      },
+      {
+        "id": "1204791257#0",
+        "name": "To Shipwreck Salalah",
+        "type": "highway.track",
+        "lanes": 1,
+        "speed": 29.988
+      },
+      {
+        "id": "1204791257#1",
+        "name": "To Shipwreck Salalah",
+        "type": "highway.track",
+        "lanes": 1,
+        "speed": 29.988
+      }
+    ],
+    "Sohar": [
+      {
+        "id": "-95403400#0",
+        "name": "Sohar Sanniya Park Road",
+        "type": "highway.unclassified",
+        "lanes": 1,
+        "speed": 50.004000000000005
+      },
+      {
+        "id": "-95403400#1",
+        "name": "Sohar Sanniya Park Road",
+        "type": "highway.unclassified",
+        "lanes": 1,
+        "speed": 50.004000000000005
+      },
+      {
+        "id": "-95403400#2",
+        "name": "Sohar Sanniya Park Road",
+        "type": "highway.unclassified",
+        "lanes": 1,
+        "speed": 50.004000000000005
+      },
+      {
+        "id": "-95403400#3",
+        "name": "Sohar Sanniya Park Road",
+        "type": "highway.unclassified",
+        "lanes": 1,
+        "speed": 50.004000000000005
+      },
+      {
+        "id": "-95403400#4",
+        "name": "Sohar Sanniya Park Road",
+        "type": "highway.unclassified",
+        "lanes": 1,
+        "speed": 50.004000000000005
+      }
+    ],
+    "Sahwa": []
+  }
+}

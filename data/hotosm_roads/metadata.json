@@ -1,0 +1,560 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/table/v1.2.0/schema.json"
+  ],
+  "id": "hotosm_omn_roads-osm",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          51.9174316,
+          16.6541003
+        ],
+        [
+          59.8364067,
+          16.6541003
+        ],
+        [
+          59.8364067,
+          26.3723711
+        ],
+        [
+          51.9174316,
+          26.3723711
+        ],
+        [
+          51.9174316,
+          16.6541003
+        ]
+      ]
+    ]
+  },
+  "bbox": [
+    51.9174316,
+    16.6541003,
+    59.8364067,
+    26.3723711
+  ],
+  "properties": {
+    "oex:category": "roads",
+    "oex:source": "osm",
+    "oex:dataset_source": "OpenStreetMap (Geofabrik OMN 2026-10-07)",
+    "oex:snapshot": "2026-10-07",
+    "oex:boundary": "geoBoundaries gbOpen ADM0",
+    "oex:version": "0.4.15",
+    "oex:pcode_source_date": "2025-07-29",
+    "oex:geometry_types": {
+      "LINESTRING": 180949,
+      "POINT": 5603,
+      "POLYGON": 1396
+    },
+    "title": "Roads of Oman",
+    "description": "187,948 features: 180,949 lines, 5,603 points, 1,396 polygons. 1 of 13 attributes are filled for at least half of the features.",
+    "license": "ODbL-1.0",
+    "created": "2026-10-07T19:02:55Z",
+    "keywords": [
+      "geodata",
+      "roads",
+      "transportation"
+    ],
+    "providers": [
+      {
+        "name": "OpenStreetMap (Geofabrik OMN 2026-10-07)",
+        "roles": [
+          "producer",
+          "licensor"
+        ]
+      }
+    ],
+    "proj:code": "EPSG:4326",
+    "table:row_count": 187948,
+    "table:primary_geometry": "geom",
+    "table:columns": [
+      {
+        "name": "id",
+        "type": "VARCHAR",
+        "oex:null_count": 0,
+        "oex:null_percent": 0.0,
+        "oex:distinct_count": 187948,
+        "oex:top_values": []
+      },
+      {
+        "name": "name",
+        "type": "VARCHAR",
+        "oex:null_count": 171377,
+        "oex:null_percent": 91.18,
+        "oex:distinct_count": 3413,
+        "oex:top_values": []
+      },
+      {
+        "name": "name_en",
+        "type": "VARCHAR",
+        "oex:null_count": 172143,
+        "oex:null_percent": 91.59,
+        "oex:distinct_count": 3137,
+        "oex:top_values": []
+      },
+      {
+        "name": "name_ar",
+        "type": "VARCHAR",
+        "oex:null_count": 177908,
+        "oex:null_percent": 94.66,
+        "oex:distinct_count": 628,
+        "oex:top_values": [
+          {
+            "value": "طريق السلطان سعيد بن تيمور",
+            "count": 610
+          },
+          {
+            "value": "طريق مسقط - قريات - صور",
+            "count": 317
+          },
+          {
+            "value": "طريق السلطان ثويني بن سعيد",
+            "count": 271
+          },
+          {
+            "value": "طريق السلطان قابوس",
+            "count": 265
+          },
+          {
+            "value": "طريق الدقم - حاسك - صلالة",
+            "count": 222
+          }
+        ]
+      },
+      {
+        "name": "highway",
+        "type": "VARCHAR",
+        "oex:null_count": 0,
+        "oex:null_percent": 0.0,
+        "oex:distinct_count": 47,
+        "oex:top_values": [
+          {
+            "value": "residential",
+            "count": 75628
+          },
+          {
+            "value": "service",
+            "count": 40293
+          },
+          {
+            "value": "track",
+            "count": 16156
+          },
+          {
+            "value": "unclassified",
+            "count": 14396
+          },
+          {
+            "value": "tertiary",
+            "count": 8087
+          }
+        ]
+      },
+      {
+        "name": "surface",
+        "type": "VARCHAR",
+        "oex:null_count": 144701,
+        "oex:null_percent": 76.99,
+        "oex:distinct_count": 32,
+        "oex:top_values": [
+          {
+            "value": "asphalt",
+            "count": 32975
+          },
+          {
+            "value": "unpaved",
+            "count": 5414
+          },
+          {
+            "value": "gravel",
+            "count": 1259
+          },
+          {
+            "value": "paved",
+            "count": 848
+          },
+          {
+            "value": "sand",
+            "count": 629
+          }
+        ]
+      },
+      {
+        "name": "smoothness",
+        "type": "VARCHAR",
+        "oex:null_count": 186499,
+        "oex:null_percent": 99.23,
+        "oex:distinct_count": 8,
+        "oex:top_values": [
+          {
+            "value": "excellent",
+            "count": 803
+          },
+          {
+            "value": "very_bad",
+            "count": 216
+          },
+          {
+            "value": "horrible",
+            "count": 202
+          },
+          {
+            "value": "bad",
+            "count": 79
+          },
+          {
+            "value": "good",
+            "count": 78
+          }
+        ]
+      },
+      {
+        "name": "width",
+        "type": "VARCHAR",
+        "oex:null_count": 187790,
+        "oex:null_percent": 99.92,
+        "oex:distinct_count": 26,
+        "oex:top_values": [
+          {
+            "value": "8",
+            "count": 39
+          },
+          {
+            "value": "5",
+            "count": 28
+          },
+          {
+            "value": "6",
+            "count": 16
+          },
+          {
+            "value": "3",
+            "count": 14
+          },
+          {
+            "value": "4",
+            "count": 12
+          }
+        ]
+      },
+      {
+        "name": "lanes",
+        "type": "VARCHAR",
+        "oex:null_count": 168585,
+        "oex:null_percent": 89.7,
+        "oex:distinct_count": 8,
+        "oex:top_values": [
+          {
+            "value": "2",
+            "count": 13634
+          },
+          {
+            "value": "1",
+            "count": 4529
+          },
+          {
+            "value": "3",
+            "count": 835
+          },
+          {
+            "value": "4",
+            "count": 331
+          },
+          {
+            "value": "5",
+            "count": 26
+          }
+        ]
+      },
+      {
+        "name": "oneway",
+        "type": "VARCHAR",
+        "oex:null_count": 151664,
+        "oex:null_percent": 80.69,
+        "oex:distinct_count": 4,
+        "oex:top_values": [
+          {
+            "value": "yes",
+            "count": 34230
+          },
+          {
+            "value": "no",
+            "count": 2048
+          },
+          {
+            "value": "reversible",
+            "count": 5
+          },
+          {
+            "value": "alternating",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "name": "bridge",
+        "type": "VARCHAR",
+        "oex:null_count": 185966,
+        "oex:null_percent": 98.95,
+        "oex:distinct_count": 5,
+        "oex:top_values": [
+          {
+            "value": "yes",
+            "count": 1947
+          },
+          {
+            "value": "viaduct",
+            "count": 23
+          },
+          {
+            "value": "low_water_crossing",
+            "count": 10
+          },
+          {
+            "value": "boardwalk",
+            "count": 1
+          },
+          {
+            "value": "no",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "name": "layer",
+        "type": "VARCHAR",
+        "oex:null_count": 185561,
+        "oex:null_percent": 98.73,
+        "oex:distinct_count": 4,
+        "oex:top_values": [
+          {
+            "value": "1",
+            "count": 1965
+          },
+          {
+            "value": "-1",
+            "count": 409
+          },
+          {
+            "value": "2",
+            "count": 11
+          },
+          {
+            "value": "-3",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "name": "source",
+        "type": "VARCHAR",
+        "oex:null_count": 187948,
+        "oex:null_percent": 100.0,
+        "oex:distinct_count": 0,
+        "oex:top_values": []
+      },
+      {
+        "name": "adm0_pcode",
+        "type": "VARCHAR",
+        "oex:null_count": 0,
+        "oex:null_percent": 0.0,
+        "oex:distinct_count": 1,
+        "oex:top_values": [
+          {
+            "value": "OMN",
+            "count": 187948
+          }
+        ]
+      },
+      {
+        "name": "adm0_name",
+        "type": "VARCHAR",
+        "oex:null_count": 0,
+        "oex:null_percent": 0.0,
+        "oex:distinct_count": 1,
+        "oex:top_values": [
+          {
+            "value": "Oman",
+            "count": 187948
+          }
+        ]
+      },
+      {
+        "name": "adm1_pcode",
+        "type": "VARCHAR",
+        "oex:null_count": 31,
+        "oex:null_percent": 0.02,
+        "oex:distinct_count": 11,
+        "oex:top_values": [
+          {
+            "value": "OM11",
+            "count": 48702
+          },
+          {
+            "value": "OM09",
+            "count": 29628
+          },
+          {
+            "value": "OM02",
+            "count": 29371
+          },
+          {
+            "value": "OM01",
+            "count": 19301
+          },
+          {
+            "value": "OM03",
+            "count": 17320
+          }
+        ]
+      },
+      {
+        "name": "adm1_name",
+        "type": "VARCHAR",
+        "oex:null_count": 31,
+        "oex:null_percent": 0.02,
+        "oex:distinct_count": 11,
+        "oex:top_values": [
+          {
+            "value": "Muscat",
+            "count": 48702
+          },
+          {
+            "value": "Dhofar",
+            "count": 29628
+          },
+          {
+            "value": "Al Batinah North",
+            "count": 29371
+          },
+          {
+            "value": "Ad Dakhliyah",
+            "count": 19301
+          },
+          {
+            "value": "Al Batinah South",
+            "count": 17320
+          }
+        ]
+      },
+      {
+        "name": "adm2_pcode",
+        "type": "VARCHAR",
+        "oex:null_count": 31,
+        "oex:null_percent": 0.02,
+        "oex:distinct_count": 49,
+        "oex:top_values": [
+          {
+            "value": "OM1145",
+            "count": 23205
+          },
+          {
+            "value": "OM0937",
+            "count": 13055
+          },
+          {
+            "value": "OM1146",
+            "count": 9314
+          },
+          {
+            "value": "OM0318",
+            "count": 9174
+          },
+          {
+            "value": "OM1148",
+            "count": 7610
+          }
+        ]
+      },
+      {
+        "name": "adm2_name",
+        "type": "VARCHAR",
+        "oex:null_count": 31,
+        "oex:null_percent": 0.02,
+        "oex:distinct_count": 49,
+        "oex:top_values": [
+          {
+            "value": "A Seeb",
+            "count": 23205
+          },
+          {
+            "value": "Salalah",
+            "count": 13055
+          },
+          {
+            "value": "Bausher",
+            "count": 9314
+          },
+          {
+            "value": "Barka",
+            "count": 9174
+          },
+          {
+            "value": "Muttrah",
+            "count": 7610
+          }
+        ]
+      },
+      {
+        "name": "adm3_pcode",
+        "type": "VARCHAR",
+        "oex:null_count": 187948,
+        "oex:null_percent": 100.0,
+        "oex:distinct_count": 0,
+        "oex:top_values": []
+      },
+      {
+        "name": "adm3_name",
+        "type": "VARCHAR",
+        "oex:null_count": 187948,
+        "oex:null_percent": 100.0,
+        "oex:distinct_count": 0,
+        "oex:top_values": []
+      },
+      {
+        "name": "adm4_pcode",
+        "type": "VARCHAR",
+        "oex:null_count": 187948,
+        "oex:null_percent": 100.0,
+        "oex:distinct_count": 0,
+        "oex:top_values": []
+      },
+      {
+        "name": "adm4_name",
+        "type": "VARCHAR",
+        "oex:null_count": 187948,
+        "oex:null_percent": 100.0,
+        "oex:distinct_count": 0,
+        "oex:top_values": []
+      },
+      {
+        "name": "name_latin",
+        "type": "VARCHAR",
+        "oex:null_count": 171197,
+        "oex:null_percent": 91.09,
+        "oex:distinct_count": 3516,
+        "oex:top_values": []
+      }
+    ],
+    "datetime": "2026-10-07T00:00:00Z"
+  },
+  "links": [
+    {
+      "rel": "license",
+      "href": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "title": "Open Database License (ODC-ODbL)"
+    },
+    {
+      "rel": "root",
+      "href": "https://production-raw-data-api.s3.amazonaws.com/ISO3/catalog.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {}
+}
